@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kumo_app/blocs/AuthenticationBloc.dart';
 import 'package:kumo_app/blocs/ThemeCubit.dart';
+import 'package:kumo_app/widgets/common_app_bar.dart';
 import 'package:kumo_app/widgets/landing_page.dart';
 import 'package:kumo_app/widgets/sign_in_form.dart';
 import 'package:provider/provider.dart';
@@ -45,43 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem(
-                  onTap: () =>
-                      setState(() => context.read<ThemeCubit>().switchTheme()),
-                  child: Row(
-                    children: [
-                      Text('Toggle Theme'),
-                      Spacer(),
-                      BlocBuilder<ThemeCubit, ThemeState>(
-                        builder: (context, state) => state.isBright
-                            ? Icon(Icons.brightness_2_outlined)
-                            : Icon(Icons.brightness_1_outlined),
-                      )
-                    ],
-                  ),
-                ),
-                if (context.read<AuthenticationBloc>().state is SignedInState)
-                  PopupMenuItem(
-                    onTap: () => context.read<AuthenticationBloc>().signOut(),
-                    child: Row(
-                      children: [
-                        Text('Sign out'),
-                        Spacer(),
-                        Icon(Icons.logout)
-                      ],
-                    ),
-                  ),
-              ];
-            },
-          )
-        ],
-      ),
+      appBar: CommonAppBar(),
       body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         buildWhen: (previous, current) {
           return previous is SigningInState && current is SignedInState ||
@@ -93,12 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
           else
             return SignInForm();
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.read<ThemeCubit>().switchTheme();
-        },
-        backgroundColor: Theme.of(context).primaryColor,
       ),
     );
   }

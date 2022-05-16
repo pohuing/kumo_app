@@ -29,6 +29,8 @@ class AuthenticationBloc extends Cubit<AuthenticationState>{
 
     if(res)
       emit(SignedOutState());
+    else
+      emit(SigninErrorState('Failed'));
 
     return res;
   }
@@ -37,6 +39,12 @@ class AuthenticationBloc extends Cubit<AuthenticationState>{
     CommunicationManager.instance.token = null;
     emit(SignedOutState());
   }
+}
+
+class SigninErrorState implements AuthenticationState {
+  final String cause;
+
+  SigninErrorState(this.cause);
 }
 
 abstract class AuthenticationState {
