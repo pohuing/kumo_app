@@ -5,7 +5,10 @@ import '../blocs/AuthenticationBloc.dart';
 import '../blocs/ThemeCubit.dart';
 
 class CommonAppBar extends AppBar {
-  CommonAppBar({Key? key}) : super(key: key);
+  String _title;
+  CommonAppBar({Key? key, required String title}) : _title = title, super(key: key);
+
+  Widget get title => Text(_title);
 
   final List<Widget> actions = [
     PopupMenuButton(

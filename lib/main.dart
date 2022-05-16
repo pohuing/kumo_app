@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kumo_app/blocs/AuthenticationBloc.dart';
 import 'package:kumo_app/blocs/ExplorationCubit.dart';
 import 'package:kumo_app/blocs/ThemeCubit.dart';
-import 'package:kumo_app/widgets/common_app_bar.dart';
-import 'package:kumo_app/widgets/landing_page.dart';
-import 'package:kumo_app/widgets/sign_in_form.dart';
+import 'package:kumo_app/widgets/router.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -29,38 +27,9 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Flutter Demo',
           theme: state.data,
-          home: const MyHomePage(title: 'Flutter Demo Home Page'),
+          onGenerateRoute: RouteGenerator.generateRoute,
         );
       },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CommonAppBar(),
-      body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        buildWhen: (previous, current) {
-          return previous is SigningInState && current is SignedInState ||
-              previous is SignedInState && !(current is SignedInState);
-        },
-        builder: (context, state) {
-          if (state is SignedInState)
-            return LandingPage();
-          else
-            return SignInForm();
-        },
-      ),
     );
   }
 }

@@ -53,7 +53,7 @@ class CommunicationManager {
     return true;
   }
 
-  Future<List<ExploreResult>> explore(String path) async {
+  Future<List<ExploreResult>>  explore(String path) async {
     final response = await client.get(
       Uri.https(host, 'api/Explore', {'path': path}),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token!},

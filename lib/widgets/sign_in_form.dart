@@ -69,11 +69,11 @@ class _SignInFormState extends State<SignInForm> {
                   return Center(child: CircularProgressIndicator.adaptive());
                 }
                 return ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (!_formKey.currentState!.validate()) return;
                     _formKey.currentState?.save();
-                    context.read<AuthenticationBloc>().signIn(
-                        _emailController.text, _passwordController.text);
+                    if(await context.read<AuthenticationBloc>().signIn(_emailController.text, _passwordController.text))
+                      Navigator.of(context).pushNamed('/explore', arguments: '');
                   },
                   child: const Text('Sign in'),
                 );
