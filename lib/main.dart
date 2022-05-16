@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kumo_app/blocs/AuthenticationBloc.dart';
+import 'package:kumo_app/blocs/ExplorationCubit.dart';
 import 'package:kumo_app/blocs/ThemeCubit.dart';
 import 'package:kumo_app/widgets/common_app_bar.dart';
 import 'package:kumo_app/widgets/landing_page.dart';
@@ -11,7 +12,8 @@ void main() {
   runApp(MultiProvider(
     providers: [
       Provider.value(value: ThemeCubit()),
-      Provider.value(value: AuthenticationBloc())
+      Provider.value(value: AuthenticationBloc()),
+      Provider.value(value: ExplorationCubit()),
     ],
     child: const MyApp(),
   ));

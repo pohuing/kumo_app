@@ -7,7 +7,7 @@ import '../blocs/ThemeCubit.dart';
 class CommonAppBar extends AppBar {
   CommonAppBar({Key? key}) : super(key: key);
 
-  List<Widget> actions = [
+  final List<Widget> actions = [
     PopupMenuButton(
       itemBuilder: (context) {
         return [
