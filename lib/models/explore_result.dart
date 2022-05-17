@@ -8,6 +8,9 @@ class ExploreResult extends Equatable{
 
   ExploreResult(this.name, this.absolutePath, this.canWrite, this.canDelete);
 
+  @override
+  List<Object?> get props => [name, absolutePath, canWrite, canDelete];
+
   static ExploreResult fromJSON(Map<String, dynamic> data){
     var name = data['name'];
     var absolutePath = data['absolutePath'];
@@ -16,7 +19,4 @@ class ExploreResult extends Equatable{
 
     return ExploreResult(name, absolutePath, canWrite, canDelete);
   }
-
-  @override
-  List<Object?> get props => [name, absolutePath, canWrite, canDelete];
 }

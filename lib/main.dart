@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/blocs/AuthenticationBloc.dart';
-import 'package:kumo_app/blocs/ExplorationCubit.dart';
-import 'package:kumo_app/blocs/ThemeCubit.dart';
+import 'package:kumo_app/blocs/authentication_bloc.dart';
+import 'package:kumo_app/blocs/exploration_cubit.dart';
+import 'package:kumo_app/blocs/theme_cubit.dart';
 import 'package:kumo_app/widgets/router.dart';
 import 'package:provider/provider.dart';
 

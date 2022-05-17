@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ThemeCubit extends Cubit<ThemeState> {
-  ThemeCubit() : super(getTheme());
   static const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
     border: OutlineInputBorder(),
   );
+  ThemeCubit() : super(getTheme());
 
 
   void switchTheme() {

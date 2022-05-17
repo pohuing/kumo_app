@@ -2,7 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/blocs/AuthenticationBloc.dart';
+import 'package:kumo_app/blocs/authentication_bloc.dart';
 import 'package:kumo_app/widgets/sign_up_screen.dart';
 
 class SignInForm extends StatefulWidget {
@@ -18,21 +18,15 @@ class _SignInFormState extends State<SignInForm> {
   final _emailController = TextEditingController();
 
   @override
-  dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: AutofillGroup(
         child: ListView(
-          shrinkWrap: true,
           padding: EdgeInsets.all(16),
+          physics: ClampingScrollPhysics(),
+          shrinkWrap: true,
           children: [
             Text('Email:', style: Theme.of(context).textTheme.titleMedium),
             SizedBox(height: 8),
@@ -40,6 +34,7 @@ class _SignInFormState extends State<SignInForm> {
               controller: _emailController,
               autofillHints: [AutofillHints.email],
               keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (EmailValidator.validate(value!)) {
                   return null;
@@ -55,6 +50,7 @@ class _SignInFormState extends State<SignInForm> {
               controller: _passwordController,
               autofillHints: [AutofillHints.password],
               keyboardType: TextInputType.visiblePassword,
+              textInputAction: TextInputAction.go,
               obscureText: true,
               validator: (value) {
                 return (value ?? "").length >= 6
@@ -72,8 +68,10 @@ class _SignInFormState extends State<SignInForm> {
                   onPressed: () async {
                     if (!_formKey.currentState!.validate()) return;
                     _formKey.currentState?.save();
-                    if(await context.read<AuthenticationBloc>().signIn(_emailController.text, _passwordController.text))
-                      Navigator.of(context).pushNamed('/explore', arguments: '');
+                    if (await context.read<AuthenticationBloc>().signIn(
+                        _emailController.text, _passwordController.text))
+                      Navigator.of(context)
+                          .pushNamed('/explore', arguments: '');
                   },
                   child: const Text('Sign in'),
                 );
@@ -103,5 +101,12 @@ class _SignInFormState extends State<SignInForm> {
         ),
       ),
     );
+  }
+
+  @override
+  dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

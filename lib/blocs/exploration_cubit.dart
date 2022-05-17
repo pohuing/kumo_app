@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/CommunicationManager.dart';
+import 'package:kumo_app/communication_manager.dart';
 import 'package:kumo_app/models/explore_result.dart';
 
 class ExplorationCubit extends Cubit<ExplorationState>{
@@ -12,12 +12,6 @@ class ExplorationCubit extends Cubit<ExplorationState>{
   }
 }
 
-class ExplorationStateLoading extends ExplorationState {
-  final String path;
-
-  ExplorationStateLoading(this.path);
-}
-
 abstract class ExplorationState {
 }
 
@@ -25,6 +19,12 @@ class ExplorationStateLoaded extends ExplorationState{
   final List<ExploreResult> items;
 
   ExplorationStateLoaded(this.items);
+}
+
+class ExplorationStateLoading extends ExplorationState {
+  final String path;
+
+  ExplorationStateLoading(this.path);
 }
 
 class ExplorationStateRoot extends ExplorationState{}

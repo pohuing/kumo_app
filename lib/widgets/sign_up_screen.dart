@@ -1,7 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/blocs/AuthenticationBloc.dart';
+import 'package:kumo_app/blocs/authentication_bloc.dart';
 import 'package:kumo_app/widgets/common_app_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -17,14 +17,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordRepeatController = TextEditingController();
   final _emailController = TextEditingController();
 
-  @override
-  dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(title: 'Sign up'),
@@ -34,6 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: AutofillGroup(
           child: ListView(
             shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
             padding: EdgeInsets.all(16),
             children: [
               Text('Email:'),
@@ -42,6 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: _emailController,
                 autofillHints: [AutofillHints.email],
                 keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (EmailValidator.validate(value!)) {
                     return null;
@@ -57,6 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: _passwordController,
                 autofillHints: [AutofillHints.password],
                 keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.next,
                 obscureText: true,
                 validator: (value) {
                   return (value ?? "").length >= 8
@@ -71,6 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: _passwordRepeatController,
                 autofillHints: [AutofillHints.password],
                 keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.done,
                 obscureText: true,
                 validator: (value) {
                   return value == _passwordController.text
@@ -106,5 +102,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _passwordRepeatController.dispose();
+    super.dispose();
   }
 }

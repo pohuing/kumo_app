@@ -7,11 +7,26 @@ import 'models/explore_result.dart';
 
 class CommunicationManager {
   static CommunicationManager _instance = CommunicationManager();
+  static CommunicationManager get instance => _instance;
   Client client;
   String? token;
+
   String host = 'localhost:5001';
 
-  static CommunicationManager get instance => _instance;
+  CommunicationManager() : client = Client() {}
+
+  Future<List<ExploreResult>>  explore(String path) async {
+    final response = await client.get(
+      Uri.https(host, 'api/Explore', {'path': path}),
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token!},
+    );
+    if(response.statusCode != 200)
+      return [];
+    // log(response.body, name:runtimeType.toString());
+    var jsonDecoded = jsonDecode(response.body);// as List<Map<String, dynamic>>;
+    return List.from(jsonDecoded).map((e) => Map<String,dynamic>.from(e)).map((e) => ExploreResult.fromJSON(e)).toList();
+
+  }
 
   Future<bool> signIn(String email, String password) async {
     final response =
@@ -35,8 +50,6 @@ class CommunicationManager {
     return true;
   }
 
-  CommunicationManager() : client = Client() {}
-
   Future<bool> signUp(String email, String password) async {
     final response =
         await client.post(Uri.https(host, 'api/Authenticate/register'),
@@ -51,18 +64,5 @@ class CommunicationManager {
     if (response.statusCode != 200) return false;
 
     return true;
-  }
-
-  Future<List<ExploreResult>>  explore(String path) async {
-    final response = await client.get(
-      Uri.https(host, 'api/Explore', {'path': path}),
-      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token!},
-    );
-    if(response.statusCode != 200)
-      return [];
-    // log(response.body, name:runtimeType.toString());
-    var jsonDecoded = jsonDecode(response.body);// as List<Map<String, dynamic>>;
-    return List.from(jsonDecoded).map((e) => Map<String,dynamic>.from(e)).map((e) => ExploreResult.fromJSON(e)).toList();
-
   }
 }

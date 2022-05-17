@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/CommunicationManager.dart';
+import 'package:kumo_app/communication_manager.dart';
 
 class AuthenticationBloc extends Cubit<AuthenticationState>{
   AuthenticationBloc() : super(SignedOutState());
@@ -20,6 +20,11 @@ class AuthenticationBloc extends Cubit<AuthenticationState>{
     return res;
   }
 
+  Future<void> signOut() async {
+    CommunicationManager.instance.token = null;
+    emit(SignedOutState());
+  }
+
   Future<bool> signUp(String email, String password) async {
     if(state is SignedInState) {
       log('Tried creating a new account despite already being signed in');
@@ -34,17 +39,6 @@ class AuthenticationBloc extends Cubit<AuthenticationState>{
 
     return res;
   }
-
-  Future<void> signOut() async {
-    CommunicationManager.instance.token = null;
-    emit(SignedOutState());
-  }
-}
-
-class SigninErrorState implements AuthenticationState {
-  final String cause;
-
-  SigninErrorState(this.cause);
 }
 
 abstract class AuthenticationState {
@@ -57,6 +51,12 @@ class SignedInState implements AuthenticationState{
   SignedInState(this.email);
 }
 
-class SigningInState implements AuthenticationState{}
-
 class SignedOutState implements AuthenticationState{}
+
+class SigninErrorState implements AuthenticationState {
+  final String cause;
+
+  SigninErrorState(this.cause);
+}
+
+class SigningInState implements AuthenticationState{}

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/AuthenticationBloc.dart';
-import '../blocs/ThemeCubit.dart';
+import '../blocs/authentication_bloc.dart';
+import '../blocs/theme_cubit.dart';
 
 class CommonAppBar extends AppBar {
   String _title;
-  CommonAppBar({Key? key, required String title}) : _title = title, super(key: key);
-
-  Widget get title => Text(_title);
-
   final List<Widget> actions = [
     PopupMenuButton(
       itemBuilder: (context) {
@@ -39,4 +35,8 @@ class CommonAppBar extends AppBar {
       },
     )
   ];
+
+  CommonAppBar({Key? key, required String title}) : _title = title, super(key: key);
+
+  Widget get title => Text(_title);
 }

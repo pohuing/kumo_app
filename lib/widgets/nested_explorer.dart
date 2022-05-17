@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kumo_app/CommunicationManager.dart';
+import 'package:kumo_app/communication_manager.dart';
 import 'package:kumo_app/models/explore_result.dart';
 
 class NestedExplorer extends StatefulWidget {
@@ -15,12 +15,6 @@ class _NestedExplorerState extends State<NestedExplorer> {
   late final future;
 
   @override
-  void initState(){
-    super.initState();
-    future = CommunicationManager.instance.explore(widget.path);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ExploreResult>>(
       future: future,
@@ -34,6 +28,7 @@ class _NestedExplorerState extends State<NestedExplorer> {
             return ListView.builder(
               itemBuilder: (context, index) {
                 return ListTile(
+                  dense: true,
                   title: Text(snapshot.data![index].name),
                   onTap: () => Navigator.of(context).pushNamed('/explore', arguments: snapshot.data![index].absolutePath),
                 );
@@ -44,5 +39,11 @@ class _NestedExplorerState extends State<NestedExplorer> {
       },
     );
 
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    future = CommunicationManager.instance.explore(widget.path);
   }
 }
