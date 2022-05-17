@@ -12,7 +12,7 @@ class NestedExplorer extends StatefulWidget {
 }
 
 class _NestedExplorerState extends State<NestedExplorer> {
-  late final future;
+  late final Future<List<ExploreResult>> future;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class _NestedExplorerState extends State<NestedExplorer> {
           case ConnectionState.none:
           case ConnectionState.waiting:
           case ConnectionState.active:
-            return Center(child: CircularProgressIndicator.adaptive(),);
+            return const Center(child: CircularProgressIndicator.adaptive(),);
           case ConnectionState.done:
             return ListView.builder(
               itemBuilder: (context, index) {
@@ -38,7 +38,6 @@ class _NestedExplorerState extends State<NestedExplorer> {
         }
       },
     );
-
   }
 
   @override

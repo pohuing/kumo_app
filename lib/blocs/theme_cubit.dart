@@ -31,7 +31,7 @@ class ThemeState extends Equatable {
   final ThemeData data;
   final bool isBright;
 
-  ThemeState(this.data, {this.isBright = false});
+  const ThemeState(this.data, {this.isBright = false});
 
   @override
   List<Object?> get props => [data];

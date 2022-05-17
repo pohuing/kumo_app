@@ -6,22 +6,23 @@ import 'package:http/http.dart';
 import 'models/explore_result.dart';
 
 class CommunicationManager {
-  static CommunicationManager _instance = CommunicationManager();
+  static final CommunicationManager _instance = CommunicationManager();
   static CommunicationManager get instance => _instance;
   Client client;
   String? token;
 
   String host = 'localhost:5001';
 
-  CommunicationManager() : client = Client() {}
+  CommunicationManager() : client = Client();
 
   Future<List<ExploreResult>>  explore(String path) async {
     final response = await client.get(
       Uri.https(host, 'api/Explore', {'path': path}),
-      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token!},
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ${token!}'},
     );
-    if(response.statusCode != 200)
+    if(response.statusCode != 200) {
       return [];
+    }
     // log(response.body, name:runtimeType.toString());
     var jsonDecoded = jsonDecode(response.body);// as List<Map<String, dynamic>>;
     return List.from(jsonDecoded).map((e) => Map<String,dynamic>.from(e)).map((e) => ExploreResult.fromJSON(e)).toList();

@@ -12,7 +12,7 @@ class RouteGenerator {
           builder: (context) {
             return Scaffold(
               appBar: CommonAppBar(title: 'Sign-in'),
-              body: SignInForm(),
+              body: const SignInForm(),
             );
           },
         );
@@ -27,7 +27,7 @@ class RouteGenerator {
         );
       case '/signup':
         return MaterialPageRoute(
-          builder: (context) => SignUpScreen(),
+          builder: (context) => const SignUpScreen(),
         );
       default:
         return MaterialPageRoute(

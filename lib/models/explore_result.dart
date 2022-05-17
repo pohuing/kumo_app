@@ -6,7 +6,7 @@ class ExploreResult extends Equatable{
   final bool canWrite;
   final bool canDelete;
 
-  ExploreResult(this.name, this.absolutePath, this.canWrite, this.canDelete);
+  const ExploreResult(this.name, this.absolutePath, this.canWrite, this.canDelete);
 
   @override
   List<Object?> get props => [name, absolutePath, canWrite, canDelete];

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_import
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +11,7 @@ class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
 
   @override
-  _SignInFormState createState() => _SignInFormState();
+  State<SignInForm> createState() => _SignInFormState();
 }
 
 class _SignInFormState extends State<SignInForm> {
@@ -24,15 +26,15 @@ class _SignInFormState extends State<SignInForm> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: AutofillGroup(
         child: ListView(
-          padding: EdgeInsets.all(16),
-          physics: ClampingScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          physics: const ClampingScrollPhysics(),
           shrinkWrap: true,
           children: [
             Text('Email:', style: Theme.of(context).textTheme.titleMedium),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextFormField(
               controller: _emailController,
-              autofillHints: [AutofillHints.email],
+              autofillHints: const [AutofillHints.email],
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               validator: (value) {
@@ -43,12 +45,12 @@ class _SignInFormState extends State<SignInForm> {
                 }
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text('Password:', style: Theme.of(context).textTheme.titleMedium),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextFormField(
               controller: _passwordController,
-              autofillHints: [AutofillHints.password],
+              autofillHints: const [AutofillHints.password],
               keyboardType: TextInputType.visiblePassword,
               textInputAction: TextInputAction.go,
               obscureText: true,
@@ -58,20 +60,21 @@ class _SignInFormState extends State<SignInForm> {
                     : 'Your password must at least be 6 characters long';
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
                 if (state is SigningInState) {
-                  return Center(child: CircularProgressIndicator.adaptive());
+                  return const Center(child: CircularProgressIndicator.adaptive());
                 }
                 return ElevatedButton(
                   onPressed: () async {
                     if (!_formKey.currentState!.validate()) return;
                     _formKey.currentState?.save();
                     if (await context.read<AuthenticationBloc>().signIn(
-                        _emailController.text, _passwordController.text))
-                      Navigator.of(context)
+                        _emailController.text, _passwordController.text)) {
+                      await Navigator.of(context)
                           .pushNamed('/explore', arguments: '');
+                    }
                   },
                   child: const Text('Sign in'),
                 );
@@ -85,7 +88,7 @@ class _SignInFormState extends State<SignInForm> {
                 final result = await Navigator.push<List<String>>(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SignUpScreen(),
+                      builder: (context) => const SignUpScreen(),
                     ));
                 if (result is List<String> && result.length == 2) {
                   _emailController.text = result.first;

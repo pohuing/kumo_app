@@ -5,21 +5,23 @@ import '../blocs/authentication_bloc.dart';
 import '../blocs/theme_cubit.dart';
 
 class CommonAppBar extends AppBar {
-  String _title;
-  final List<Widget> actions = [
+  final String _title;
+
+
+  CommonAppBar({Key? key, required String title}) : _title = title, super(key: key, actions: [
     PopupMenuButton(
       itemBuilder: (context) {
         return [
           PopupMenuItem(
             onTap: () => context.read<ThemeCubit>().switchTheme(),
             child: Row(
-              children: [
+              children: [const
                 Text('Toggle Theme'),
-                Spacer(),
+                const Spacer(),
                 BlocBuilder<ThemeCubit, ThemeState>(
                   builder: (context, state) => state.isBright
-                      ? Icon(Icons.brightness_2_outlined)
-                      : Icon(Icons.brightness_1_outlined),
+                      ? const Icon(Icons.brightness_2_outlined)
+                      : const Icon(Icons.brightness_1_outlined),
                 )
               ],
             ),
@@ -28,15 +30,14 @@ class CommonAppBar extends AppBar {
             PopupMenuItem(
               onTap: () => context.read<AuthenticationBloc>().signOut(),
               child: Row(
-                children: [Text('Sign out'), Spacer(), Icon(Icons.logout)],
+                children: const [Text('Sign out'), Spacer(), Icon(Icons.logout)],
               ),
             ),
         ];
       },
     )
-  ];
+  ]);
 
-  CommonAppBar({Key? key, required String title}) : _title = title, super(key: key);
-
+  @override
   Widget get title => Text(_title);
 }

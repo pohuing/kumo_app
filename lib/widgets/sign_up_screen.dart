@@ -8,7 +8,7 @@ class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
@@ -17,6 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordRepeatController = TextEditingController();
   final _emailController = TextEditingController();
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(title: 'Sign up'),
@@ -26,14 +27,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: AutofillGroup(
           child: ListView(
             shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
-            padding: EdgeInsets.all(16),
+            physics: const ClampingScrollPhysics(),
+            padding: const EdgeInsets.all(16),
             children: [
-              Text('Email:'),
-              SizedBox(height: 8),
+              const Text('Email:'),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _emailController,
-                autofillHints: [AutofillHints.email],
+                autofillHints: const [AutofillHints.email],
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
@@ -44,12 +45,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   }
                 },
               ),
-              SizedBox(height: 16),
-              Text('Password:'),
-              SizedBox(height: 8),
+              const SizedBox(height: 16),
+              const Text('Password:'),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordController,
-                autofillHints: [AutofillHints.password],
+                autofillHints: const [AutofillHints.password],
                 keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.next,
                 obscureText: true,
@@ -59,12 +60,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : 'Your password must at least be 8 characters long';
                 },
               ),
-              SizedBox(height: 16),
-              Text('Repeat password:'),
-              SizedBox(height: 8),
+              const SizedBox(height: 16),
+              const Text('Repeat password:'),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordRepeatController,
-                autofillHints: [AutofillHints.password],
+                autofillHints: const [AutofillHints.password],
                 keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.done,
                 obscureText: true,
@@ -74,11 +75,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : 'Passwords have to match';
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
                   if (state is SigningInState) {
-                    return Center(child: CircularProgressIndicator.adaptive());
+                    return const Center(child: CircularProgressIndicator.adaptive());
                   }
                   return ElevatedButton(
                     onPressed: () async {
@@ -89,6 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           .signUp(
                               _emailController.text, _passwordController.text);
                       if (result == true) {
+                        // ignore: use_build_context_synchronously
                         Navigator.of(context).pop(
                             [_emailController.text, _passwordController.text]);
                       }
