@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kumo_app/widgets/common_app_bar.dart';
 import 'package:kumo_app/widgets/nested_explorer.dart';
@@ -18,12 +21,34 @@ class RouteGenerator {
         );
       case '/explore':
         final args = settings.arguments as String;
-        return MaterialPageRoute(
-          builder: (context) => Scaffold(
+        if (Platform.isIOS) {
+          return CupertinoPageRoute(
+            builder: (context) => Scaffold(
+                appBar: CommonAppBar(
+                  title: args,
+                ),
+                body: NestedExplorer(path: args)),
+          );
+        }
+        return PageRouteBuilder(
+          pageBuilder: (context, a1, a2) => Scaffold(
               appBar: CommonAppBar(
                 title: args,
               ),
               body: NestedExplorer(path: args)),
+          transitionsBuilder: (context, a1, a2, child) {
+            const begin = Offset(1, 0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+
+            final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            final offsetAnimation = a1.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
         );
       case '/signup':
         return MaterialPageRoute(

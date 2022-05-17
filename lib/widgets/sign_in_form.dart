@@ -73,7 +73,7 @@ class _SignInFormState extends State<SignInForm> {
                     if (await context.read<AuthenticationBloc>().signIn(
                         _emailController.text, _passwordController.text)) {
                       await Navigator.of(context)
-                          .pushNamed('/explore', arguments: '');
+                          .pushReplacementNamed('/explore', arguments: '');
                     }
                   },
                   child: const Text('Sign in'),
