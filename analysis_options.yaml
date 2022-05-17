@@ -2,4 +2,7 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    unawaited_futures
+    - unawaited_futures
+    - overridden_fields
+    - annotate_overrides
+    - unnecessary_overrides

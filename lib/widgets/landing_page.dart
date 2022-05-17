@@ -1,6 +1,8 @@
+// ignore_for_file: unnecessary_const
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/blocs/ExplorationCubit.dart';
+import 'package:kumo_app/blocs/exploration_cubit.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -15,8 +17,8 @@ class _LandingPageState extends State<LandingPage> {
     return BlocBuilder<ExplorationCubit, ExplorationState>(
       builder: (context, state) {
         if (state is ExplorationStateLoading) {
-          return Center(
-            child: CircularProgressIndicator.adaptive(),
+          return const Center(
+            child: const CircularProgressIndicator.adaptive(),
           );
         }
 

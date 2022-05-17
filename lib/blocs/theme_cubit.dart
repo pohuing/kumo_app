@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ThemeCubit extends Cubit<ThemeState> {
-  ThemeCubit() : super(getTheme());
   static const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
     border: OutlineInputBorder(),
   );
+  ThemeCubit() : super(getTheme());
 
 
   void switchTheme() {
@@ -31,7 +31,7 @@ class ThemeState extends Equatable {
   final ThemeData data;
   final bool isBright;
 
-  ThemeState(this.data, {this.isBright = false});
+  const ThemeState(this.data, {this.isBright = false});
 
   @override
   List<Object?> get props => [data];

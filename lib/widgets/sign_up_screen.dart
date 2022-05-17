@@ -1,14 +1,14 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/blocs/AuthenticationBloc.dart';
+import 'package:kumo_app/blocs/authentication_bloc.dart';
 import 'package:kumo_app/widgets/common_app_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
@@ -18,30 +18,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _emailController = TextEditingController();
 
   @override
-  dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(),
+      appBar: CommonAppBar(title: 'Sign up'),
       body: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: AutofillGroup(
           child: ListView(
             shrinkWrap: true,
-            padding: EdgeInsets.all(16),
+            physics: const ClampingScrollPhysics(),
+            padding: const EdgeInsets.all(16),
             children: [
-              Text('Email:'),
-              SizedBox(height: 8),
+              const Text('Email:'),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _emailController,
-                autofillHints: [AutofillHints.email],
+                autofillHints: const [AutofillHints.email],
                 keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (EmailValidator.validate(value!)) {
                     return null;
@@ -50,13 +45,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   }
                 },
               ),
-              SizedBox(height: 16),
-              Text('Password:'),
-              SizedBox(height: 8),
+              const SizedBox(height: 16),
+              const Text('Password:'),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordController,
-                autofillHints: [AutofillHints.password],
+                autofillHints: const [AutofillHints.password],
                 keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.next,
                 obscureText: true,
                 validator: (value) {
                   return (value ?? "").length >= 8
@@ -64,13 +60,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : 'Your password must at least be 8 characters long';
                 },
               ),
-              SizedBox(height: 16),
-              Text('Repeat password:'),
-              SizedBox(height: 8),
+              const SizedBox(height: 16),
+              const Text('Repeat password:'),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordRepeatController,
-                autofillHints: [AutofillHints.password],
+                autofillHints: const [AutofillHints.password],
                 keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.done,
                 obscureText: true,
                 validator: (value) {
                   return value == _passwordController.text
@@ -78,11 +75,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : 'Passwords have to match';
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
                   if (state is SigningInState) {
-                    return Center(child: CircularProgressIndicator.adaptive());
+                    return const Center(child: CircularProgressIndicator.adaptive());
                   }
                   return ElevatedButton(
                     onPressed: () async {
@@ -93,6 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           .signUp(
                               _emailController.text, _passwordController.text);
                       if (result == true) {
+                        // ignore: use_build_context_synchronously
                         Navigator.of(context).pop(
                             [_emailController.text, _passwordController.text]);
                       }
@@ -106,5 +104,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _passwordRepeatController.dispose();
+    super.dispose();
   }
 }

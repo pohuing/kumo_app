@@ -1,23 +1,29 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/CommunicationManager.dart';
+import 'package:kumo_app/communication_manager.dart';
 
 class AuthenticationBloc extends Cubit<AuthenticationState>{
   AuthenticationBloc() : super(SignedOutState());
 
   Future<bool> signIn(String email, String password) async {
     if (state is SignedInState) {
-      log('Tried signing in despite being signed in', name: runtimeType.toString() + 'signIn()');
+      log('Tried signing in despite being signed in', name: '$runtimeType.signIn()');
     }
     emit(SigningInState());
 
     final res = await CommunicationManager.instance.signIn(email, password);
-    if(res)
+    if(res) {
       emit(SignedInState(email));
-    else
+    } else {
       emit(SignedOutState());
+    }
     return res;
+  }
+
+  Future<void> signOut() async {
+    CommunicationManager.instance.token = null;
+    emit(SignedOutState());
   }
 
   Future<bool> signUp(String email, String password) async {
@@ -27,24 +33,14 @@ class AuthenticationBloc extends Cubit<AuthenticationState>{
     emit(SigningInState());
     final res = await CommunicationManager.instance.signUp(email, password);
 
-    if(res)
+    if(res) {
       emit(SignedOutState());
-    else
-      emit(SigninErrorState('Failed'));
+    } else {
+      emit(SignInErrorState('Failed'));
+    }
 
     return res;
   }
-
-  Future<void> signOut() async {
-    CommunicationManager.instance.token = null;
-    emit(SignedOutState());
-  }
-}
-
-class SigninErrorState implements AuthenticationState {
-  final String cause;
-
-  SigninErrorState(this.cause);
 }
 
 abstract class AuthenticationState {
@@ -57,6 +53,12 @@ class SignedInState implements AuthenticationState{
   SignedInState(this.email);
 }
 
-class SigningInState implements AuthenticationState{}
-
 class SignedOutState implements AuthenticationState{}
+
+class SignInErrorState implements AuthenticationState {
+  final String cause;
+
+  SignInErrorState(this.cause);
+}
+
+class SigningInState implements AuthenticationState{}
