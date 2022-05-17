@@ -11,7 +11,7 @@ class CommunicationManager {
   Client client;
   String? token;
 
-  String host = 'localhost:5001';
+  String host = '192.168.2.101:5001';
 
   CommunicationManager() : client = Client();
 
