@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kumo_app/communication_manager.dart';
 import 'package:kumo_app/models/explore_result.dart';
+import 'package:kumo_app/widgets/general_purpose/accent_color_picker.dart';
 
 class NestedExplorer extends StatefulWidget {
   final String path;
@@ -29,15 +30,34 @@ class _NestedExplorerState extends State<NestedExplorer> {
           case ConnectionState.done:
             return ListView.builder(
               itemBuilder: (context, index) {
+                if (index == snapshot.data!.length) {
+                  return ListTile(
+                    onTap: showColorPicker,
+                    title: const Text('Show color'),
+                  );
+                }
+
                 return FileWidget(
                   data: snapshot.data![index],
                 );
               },
-              itemCount: snapshot.data!.length,
+              itemCount: snapshot.data!.length + 1,
             );
         }
       },
     );
+  }
+
+  Future<void> showColorPicker() async {
+    await showDialog(
+        barrierColor: Colors.transparent,
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            title: Text('Select a new color seed'),
+            content: SingleChildScrollView(child: AccentColorPicker()),
+          );
+        });
   }
 
   @override
@@ -60,13 +80,13 @@ class FileWidget extends StatelessWidget {
     late final Widget icon;
     switch (data.fileSystemEntityType) {
       case FileSystemEntryType.unknown:
-        icon = Icon(Icons.question_mark);
+        icon = const Icon(Icons.question_mark);
         break;
       case FileSystemEntryType.directory:
-        icon = Icon(Icons.folder);
+        icon = const Icon(Icons.folder);
         break;
       case FileSystemEntryType.file:
-        icon = Icon(Icons.file_open);
+        icon = const Icon(Icons.file_open);
         break;
     }
 

@@ -2,7 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kumo_app/blocs/authentication_bloc.dart';
-import 'package:kumo_app/widgets/common_app_bar.dart';
+import 'package:kumo_app/widgets/general_purpose/common_app_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);

@@ -4,27 +4,27 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class ThemeCubit extends HydratedCubit<ThemeState> {
+class ThemeCubit extends Cubit<ThemeState> {
   static const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
     border: OutlineInputBorder(),
   );
-  ThemeCubit() : super(getTheme());
 
+  static Color seed = Colors.white;
+
+  ThemeCubit() : super(ThemeState(getTheme(), isBright: true));
 
   void switchTheme() {
     emit(
-      getTheme(isBright: !state.isBright),
+      ThemeState(getTheme(isBright: !state.isBright),
+          isBright: !state.isBright),
     );
   }
 
-  static ThemeState getTheme({bool isBright = true}) {
-    return ThemeState(
-      ThemeData(
-        inputDecorationTheme: inputDecorationTheme,
-        colorSchemeSeed: Colors.white,
-        brightness: isBright ? Brightness.dark : Brightness.light,
-      ),
-      isBright: isBright,
+  static ThemeData getTheme({bool isBright = true}) {
+    return ThemeData(
+      inputDecorationTheme: inputDecorationTheme,
+      colorSchemeSeed: ThemeCubit.seed,
+      brightness: isBright ? Brightness.light : Brightness.dark,
     );
   }
 
@@ -39,6 +39,12 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
     log(state.toString(), name: '$runtimeType.toJson');
     return state.toJson();
   }
+
+  void setSeed(Color color) {
+    seed = color;
+    emit(ThemeState(getTheme(isBright: state.isBright),
+        isBright: state.isBright));
+  }
 }
 
 class ThemeState extends Equatable {
@@ -52,7 +58,8 @@ class ThemeState extends Equatable {
 
   static ThemeState? fromJson(Map<String, dynamic> json) {
     log(json.toString(), name: '$ThemeState.fromJson');
-    return ThemeCubit.getTheme(isBright: json['isBright']);
+    return ThemeState(ThemeCubit.getTheme(isBright: json['isBright']),
+        isBright: json['isBright']);
   }
 
   Map<String, dynamic>? toJson() {

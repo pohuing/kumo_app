@@ -1,32 +1,40 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
 import 'models/explore_result.dart';
 
 class CommunicationManager {
   static final CommunicationManager _instance = CommunicationManager();
+
   static CommunicationManager get instance => _instance;
   Client client;
   String? token;
 
-  String host = '192.168.2.101:5001';
+  String host = kIsWeb ? 'localhost:5001' : '192.168.2.101:5001';
 
   CommunicationManager() : client = Client();
 
-  Future<List<ExploreResult>>  explore(String path) async {
+  Future<List<ExploreResult>> explore(String path) async {
     final response = await client.get(
       Uri.https(host, 'api/Explore', {'path': path}),
-      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ${token!}'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${token!}'
+      },
     );
-    if(response.statusCode != 200) {
+    if (response.statusCode != 200) {
       return [];
     }
     // log(response.body, name:runtimeType.toString());
-    var jsonDecoded = jsonDecode(response.body);// as List<Map<String, dynamic>>;
-    return List.from(jsonDecoded).map((e) => Map<String,dynamic>.from(e)).map((e) => ExploreResult.fromJSON(e)).toList();
-
+    var jsonDecoded =
+        jsonDecode(response.body); // as List<Map<String, dynamic>>;
+    return List.from(jsonDecoded)
+        .map((e) => Map<String, dynamic>.from(e))
+        .map((e) => ExploreResult.fromJSON(e))
+        .toList();
   }
 
   Future<bool> signIn(String email, String password) async {
