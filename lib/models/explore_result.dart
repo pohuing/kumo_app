@@ -5,8 +5,9 @@ class ExploreResult extends Equatable{
   final String absolutePath;
   final bool canWrite;
   final bool canDelete;
+  final FileSystemEntryType fileSystemEntityType;
 
-  const ExploreResult(this.name, this.absolutePath, this.canWrite, this.canDelete);
+  const ExploreResult(this.name, this.absolutePath, this.canWrite, this.canDelete, this.fileSystemEntityType);
 
   @override
   List<Object?> get props => [name, absolutePath, canWrite, canDelete];
@@ -16,7 +17,12 @@ class ExploreResult extends Equatable{
     var absolutePath = data['absolutePath'];
     var canWrite = data['canWrite'] ?? false;
     var canDelete = data['canDelete'] ?? false;
+    var fileSystemEntryType = FileSystemEntryType.values[data['fileSystemEntryType']];
 
-    return ExploreResult(name, absolutePath, canWrite, canDelete);
+    return ExploreResult(name, absolutePath, canWrite, canDelete, fileSystemEntryType);
   }
+}
+
+enum FileSystemEntryType{
+  unknown, directory, file
 }

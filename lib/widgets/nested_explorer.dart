@@ -19,18 +19,18 @@ class _NestedExplorerState extends State<NestedExplorer> {
     return FutureBuilder<List<ExploreResult>>(
       future: future,
       builder: (context, snapshot) {
-        switch(snapshot.connectionState){
+        switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
           case ConnectionState.active:
-            return const Center(child: CircularProgressIndicator.adaptive(),);
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
           case ConnectionState.done:
             return ListView.builder(
               itemBuilder: (context, index) {
-                return ListTile(
-                  dense: true,
-                  title: Text(snapshot.data![index].name),
-                  onTap: () => Navigator.of(context).pushNamed('/explore', arguments: snapshot.data![index].absolutePath),
+                return FileWidget(
+                  data: snapshot.data![index],
                 );
               },
               itemCount: snapshot.data!.length,
@@ -41,8 +41,43 @@ class _NestedExplorerState extends State<NestedExplorer> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     future = CommunicationManager.instance.explore(widget.path);
+  }
+}
+
+class FileWidget extends StatelessWidget {
+  final ExploreResult data;
+
+  const FileWidget({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    late final Widget icon;
+    switch (data.fileSystemEntityType) {
+      case FileSystemEntryType.unknown:
+        icon = Icon(Icons.question_mark);
+        break;
+      case FileSystemEntryType.directory:
+        icon = Icon(Icons.folder);
+        break;
+      case FileSystemEntryType.file:
+        icon = Icon(Icons.file_open);
+        break;
+    }
+
+    return ListTile(
+      dense: true,
+      leading: icon,
+      title: Text(data.name),
+      onTap: data.fileSystemEntityType == FileSystemEntryType.directory
+          ? () => Navigator.of(context)
+              .pushNamed('/explore', arguments: data.absolutePath)
+          : null,
+    );
   }
 }

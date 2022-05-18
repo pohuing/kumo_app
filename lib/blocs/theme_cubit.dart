@@ -48,7 +48,7 @@ class ThemeState extends Equatable {
   const ThemeState(this.data, {this.isBright = false});
 
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [data, isBright];
 
   static ThemeState? fromJson(Map<String, dynamic> json) {
     log(json.toString(), name: '$ThemeState.fromJson');
