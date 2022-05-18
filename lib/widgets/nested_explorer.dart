@@ -53,10 +53,7 @@ class _NestedExplorerState extends State<NestedExplorer> {
         barrierColor: Colors.transparent,
         context: context,
         builder: (context) {
-          return const AlertDialog(
-            title: Text('Select a new color seed'),
-            content: SingleChildScrollView(child: AccentColorPicker()),
-          );
+          return const AccentColorPicker();
         });
   }
 

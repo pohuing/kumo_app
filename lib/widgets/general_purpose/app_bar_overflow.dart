@@ -40,7 +40,9 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
           ),
           PopupMenuItem(
             child: const Text('Select color seed'),
-            onTap: () async {},
+            onTap: () async {
+
+            },
           ),
           if (context.read<AuthenticationCubit>().state is SignedInState)
             PopupMenuItem(

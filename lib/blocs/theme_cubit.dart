@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-class ThemeCubit extends Cubit<ThemeState> {
+class ThemeCubit extends HydratedCubit<ThemeState> {
   static const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
     border: OutlineInputBorder(),
   );
@@ -20,10 +20,10 @@ class ThemeCubit extends Cubit<ThemeState> {
     );
   }
 
-  static ThemeData getTheme({bool isBright = true}) {
+  static ThemeData getTheme({bool isBright = true, Color? seed}) {
     return ThemeData(
       inputDecorationTheme: inputDecorationTheme,
-      colorSchemeSeed: ThemeCubit.seed,
+      colorSchemeSeed: seed ?? ThemeCubit.seed,
       brightness: isBright ? Brightness.light : Brightness.dark,
     );
   }
@@ -31,13 +31,14 @@ class ThemeCubit extends Cubit<ThemeState> {
   @override
   ThemeState? fromJson(Map<String, dynamic> json) {
     log(json.toString(), name: '$ThemeCubit.fromJson');
+    seed = Color(json['seed']);
     return ThemeState.fromJson(json);
   }
 
   @override
   Map<String, dynamic>? toJson(ThemeState state) {
     log(state.toString(), name: '$runtimeType.toJson');
-    return state.toJson();
+    return {'seed': seed.value, ...?state.toJson()};
   }
 
   void setSeed(Color color) {
