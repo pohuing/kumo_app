@@ -29,19 +29,10 @@ class _NestedExplorerState extends State<NestedExplorer> {
             );
           case ConnectionState.done:
             return ListView.builder(
-              itemBuilder: (context, index) {
-                if (index == snapshot.data!.length) {
-                  return ListTile(
-                    onTap: showColorPicker,
-                    title: const Text('Show color'),
-                  );
-                }
-
-                return FileWidget(
+              itemBuilder: (context, index) => FileWidget(
                   data: snapshot.data![index],
-                );
-              },
-              itemCount: snapshot.data!.length + 1,
+                ),
+              itemCount: snapshot.data!.length,
             );
         }
       },

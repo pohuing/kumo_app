@@ -43,7 +43,8 @@ class RouteGenerator {
             const end = Offset.zero;
             const curve = Curves.ease;
 
-            final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            final tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
             final offsetAnimation = a1.drive(tween);
 
             return SlideTransition(

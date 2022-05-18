@@ -9,6 +9,10 @@ class AccentColorPicker extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
+  static Future<void> showColorPickerDialog(BuildContext context){
+    return showDialog(context: context, builder: (context) => const AccentColorPicker());
+  }
+
   @override
   State<AccentColorPicker> createState() => _AccentColorPickerState();
 }
@@ -33,7 +37,9 @@ class _AccentColorPickerState extends State<AccentColorPicker> {
       title: const Text('Select a new color seed'),
       actions: [
         MaterialButton(
-          onPressed: () => context.read<ThemeCubit>().setSeed(currentColor),
+          onPressed: () {
+            context.read<ThemeCubit>().setSeed(currentColor);
+          },
           child: Text(
             'Save color',
             style: Theme.of(context).textTheme.titleMedium,
