@@ -62,10 +62,11 @@ class _SignInFormState extends State<SignInForm> {
                 keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.go,
                 obscureText: true,
+                onFieldSubmitted: (value) => signInAction(),
                 validator: (value) {
-                  return (value ?? "").length >= 6
+                  return (value ?? "").length >= 8
                       ? null
-                      : 'Your password must at least be 6 characters long';
+                      : 'Your password must at least be 8 characters long';
                 },
               ),
               const SizedBox(height: 16),
@@ -76,15 +77,7 @@ class _SignInFormState extends State<SignInForm> {
                         child: CircularProgressIndicator.adaptive());
                   }
                   return ElevatedButton(
-                    onPressed: () async {
-                      if (!_formKey.currentState!.validate()) return;
-                      _formKey.currentState?.save();
-                      if (await context.read<AuthenticationCubit>().signIn(
-                          _emailController.text, _passwordController.text)) {
-                        await Navigator.of(context)
-                            .pushReplacementNamed('/explore', arguments: '');
-                      }
-                    },
+                    onPressed: signInAction,
                     child: const Text('Sign in'),
                   );
                 },
@@ -118,5 +111,16 @@ class _SignInFormState extends State<SignInForm> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> signInAction() async {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState?.save();
+    if (await context
+        .read<AuthenticationCubit>()
+        .signIn(_emailController.text, _passwordController.text)) {
+      await Navigator.of(context)
+          .pushReplacementNamed('/explore', arguments: '');
+    }
   }
 }

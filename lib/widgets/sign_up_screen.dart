@@ -69,6 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.done,
                 obscureText: true,
+                onFieldSubmitted: (v) => signupAction(),
                 validator: (value) {
                   return value == _passwordController.text
                       ? null
@@ -79,23 +80,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               BlocBuilder<AuthenticationCubit, AuthenticationState>(
                 builder: (context, state) {
                   if (state is SigningInState) {
-                    return const Center(child: CircularProgressIndicator.adaptive());
+                    return const Center(
+                        child: CircularProgressIndicator.adaptive());
                   }
                   return ElevatedButton(
-                    onPressed: () async {
-                      if (!_formKey.currentState!.validate()) return;
-                      _formKey.currentState?.save();
-                      final result = await context
-                          .read<AuthenticationCubit>()
-                          .signUp(
-                              _emailController.text, _passwordController.text);
-                      if (result == true) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context).pop(
-                            [_emailController.text, _passwordController.text]);
-                      }
-                    },
-                    child: const Text('Sign in'),
+                    onPressed: signupAction,
+                    child: const Text('Sign up'),
                   );
                 },
               ),
@@ -107,10 +97,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   @override
-  dispose() {
+  void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _passwordRepeatController.dispose();
     super.dispose();
+  }
+
+  Future<void> signupAction() async {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState?.save();
+    final result = await context
+        .read<AuthenticationCubit>()
+        .signUp(_emailController.text, _passwordController.text);
+    if (result == true) {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context)
+          .pop([_emailController.text, _passwordController.text]);
+    }
   }
 }
