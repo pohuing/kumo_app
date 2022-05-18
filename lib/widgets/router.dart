@@ -20,7 +20,8 @@ class RouteGenerator {
           },
         );
       case '/explore':
-        final args = settings.arguments as String;
+      case 'explore':
+        final args = (settings.arguments ?? '') as String;
         if (Platform.isIOS) {
           return CupertinoPageRoute(
             builder: (context) => Scaffold(

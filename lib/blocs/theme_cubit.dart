@@ -19,7 +19,7 @@ class ThemeCubit extends Cubit<ThemeState> {
     return ThemeState(
       ThemeData(
         inputDecorationTheme: inputDecorationTheme,
-        colorSchemeSeed: Colors.teal,
+        colorSchemeSeed: Colors.white,
         brightness: isBright ? Brightness.dark : Brightness.light,
       ),
       isBright: !isBright,

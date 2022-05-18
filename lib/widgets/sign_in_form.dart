@@ -24,83 +24,90 @@ class _SignInFormState extends State<SignInForm> {
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: AutofillGroup(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          physics: const ClampingScrollPhysics(),
-          shrinkWrap: true,
-          children: [
-            Text('Email:', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            TextFormField(
-              controller: _emailController,
-              autofillHints: const [AutofillHints.email],
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              validator: (value) {
-                if (EmailValidator.validate(value!)) {
-                  return null;
-                } else {
-                  return 'Please enter an email address';
-                }
-              },
-            ),
-            const SizedBox(height: 16),
-            Text('Password:', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            TextFormField(
-              controller: _passwordController,
-              autofillHints: const [AutofillHints.password],
-              keyboardType: TextInputType.visiblePassword,
-              textInputAction: TextInputAction.go,
-              obscureText: true,
-              validator: (value) {
-                return (value ?? "").length >= 6
-                    ? null
-                    : 'Your password must at least be 6 characters long';
-              },
-            ),
-            const SizedBox(height: 16),
-            BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (context, state) {
-                if (state is SigningInState) {
-                  return const Center(child: CircularProgressIndicator.adaptive());
-                }
-                return ElevatedButton(
-                  onPressed: () async {
-                    if (!_formKey.currentState!.validate()) return;
-                    _formKey.currentState?.save();
-                    if (await context.read<AuthenticationBloc>().signIn(
-                        _emailController.text, _passwordController.text)) {
-                      await Navigator.of(context)
-                          .pushReplacementNamed('/explore', arguments: '');
-                    }
-                  },
-                  child: const Text('Sign in'),
-                );
-              },
-            ),
-            BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (context, state) => Text(state.runtimeType.toString()),
-            ),
-            MaterialButton(
-              onPressed: () async {
-                final result = await Navigator.push<List<String>>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignUpScreen(),
-                    ));
-                if (result is List<String> && result.length == 2) {
-                  _emailController.text = result.first;
-                  _passwordController.text = result.last;
-                }
-              },
-              child: Text(
-                'Want to sign up instead?',
-                style: Theme.of(context).textTheme.titleMedium,
+      child: BlocListener<AuthenticationCubit, AuthenticationState>(
+        listenWhen: (previous, current) => current is SignInErrorState,
+        listener: (context, state) =>
+            ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text((state as SignInErrorState).cause),
+          ),
+        ),
+        child: AutofillGroup(
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            physics: const ClampingScrollPhysics(),
+            shrinkWrap: true,
+            children: [
+              Text('Email:', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _emailController,
+                autofillHints: const [AutofillHints.email],
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                validator: (value) {
+                  if (EmailValidator.validate(value!)) {
+                    return null;
+                  } else {
+                    return 'Please enter an email address';
+                  }
+                },
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              Text('Password:', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _passwordController,
+                autofillHints: const [AutofillHints.password],
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.go,
+                obscureText: true,
+                validator: (value) {
+                  return (value ?? "").length >= 6
+                      ? null
+                      : 'Your password must at least be 6 characters long';
+                },
+              ),
+              const SizedBox(height: 16),
+              BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                builder: (context, state) {
+                  if (state is SigningInState) {
+                    return const Center(
+                        child: CircularProgressIndicator.adaptive());
+                  }
+                  return ElevatedButton(
+                    onPressed: () async {
+                      if (!_formKey.currentState!.validate()) return;
+                      _formKey.currentState?.save();
+                      if (await context.read<AuthenticationCubit>().signIn(
+                          _emailController.text, _passwordController.text)) {
+                        await Navigator.of(context)
+                            .pushReplacementNamed('/explore', arguments: '');
+                      }
+                    },
+                    child: const Text('Sign in'),
+                  );
+                },
+              ),
+              MaterialButton(
+                onPressed: () async {
+                  final result = await Navigator.push<List<String>>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpScreen(),
+                      ));
+                  if (result is List<String> && result.length == 2) {
+                    _emailController.text = result.first;
+                    _passwordController.text = result.last;
+                  }
+                },
+                child: Text(
+                  'Want to sign up instead?',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

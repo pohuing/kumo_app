@@ -76,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              BlocBuilder<AuthenticationCubit, AuthenticationState>(
                 builder: (context, state) {
                   if (state is SigningInState) {
                     return const Center(child: CircularProgressIndicator.adaptive());
@@ -86,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (!_formKey.currentState!.validate()) return;
                       _formKey.currentState?.save();
                       final result = await context
-                          .read<AuthenticationBloc>()
+                          .read<AuthenticationCubit>()
                           .signUp(
                               _emailController.text, _passwordController.text);
                       if (result == true) {

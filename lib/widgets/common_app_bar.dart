@@ -26,9 +26,12 @@ class CommonAppBar extends AppBar {
               ],
             ),
           ),
-          if (context.read<AuthenticationBloc>().state is SignedInState)
+          if (context.read<AuthenticationCubit>().state is SignedInState)
             PopupMenuItem(
-              onTap: () => context.read<AuthenticationBloc>().signOut(),
+              onTap: () async {
+                await context.read<AuthenticationCubit>().signOut();
+                await Navigator.of(context, rootNavigator: true).pushReplacementNamed('/');
+              },
               child: Row(
                 children: const [Text('Sign out'), Spacer(), Icon(Icons.logout)],
               ),
