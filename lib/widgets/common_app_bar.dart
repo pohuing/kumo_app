@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/authentication_bloc.dart';
@@ -22,8 +21,14 @@ class CommonAppBar extends AppBar {
                       const Spacer(),
                       BlocBuilder<ThemeCubit, ThemeState>(
                         builder: (context, state) => state.isBright
-                            ? const Icon(Icons.brightness_2_outlined)
-                            : const Icon(Icons.brightness_1_outlined),
+                            ? Icon(
+                                Icons.brightness_2,
+                                color: Theme.of(context).colorScheme.primary,
+                              )
+                            : Icon(
+                                Icons.brightness_1,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                       )
                     ],
                   ),
@@ -36,10 +41,13 @@ class CommonAppBar extends AppBar {
                           .pushReplacementNamed('/');
                     },
                     child: Row(
-                      children: const [
-                        Text('Sign out'),
-                        Spacer(),
-                        Icon(Icons.logout)
+                      children: [
+                        const Text('Sign out'),
+                        const Spacer(),
+                        Icon(
+                          Icons.logout,
+                          color: Theme.of(context).colorScheme.primary,
+                        )
                       ],
                     ),
                   ),
