@@ -30,13 +30,13 @@ class _PathPointManagementViewState extends State<PathPointManagementView> {
                     onPressed: cubit.anyChanged ? () {} : null,
                     icon: const Icon(Icons.save)),
               ),
-              Spacer(),
+              const Spacer(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FloatingActionButton(
-                  child: const Icon(Icons.add),
-                  elevation: 10,
+                  elevation: Theme.of(context).useMaterial3 ? 0 : null,
                   onPressed: () {},
+                  child: const Icon(Icons.add),
                 ),
               ),
             ],
@@ -96,7 +96,7 @@ class _PathPointManagementViewState extends State<PathPointManagementView> {
   @override
   void initState() {
     super.initState();
-    cubit = PathPointManagementCubit(PathPointManagementState(const []));
+    cubit = PathPointManagementCubit(const PathPointManagementState([]));
     cubit.loadPoints();
   }
 }

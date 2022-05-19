@@ -10,9 +10,9 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
   );
 
   static Color seed = Colors.white;
-  static const bool m3_default = true;
+  static const bool m3Default = true;
 
-  ThemeCubit() : super(ThemeState(getTheme(), isBright: true, m3: m3_default));
+  ThemeCubit() : super(ThemeState(getTheme(), isBright: true, m3: m3Default));
 
   void switchTheme() {
     emit(
@@ -40,7 +40,7 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
   }
 
   static ThemeData getTheme(
-      {bool isBright = true, Color? seed, bool? m3 = m3_default}) {
+      {bool isBright = true, Color? seed, bool? m3 = m3Default}) {
     return ThemeData(
       useMaterial3: m3,
       inputDecorationTheme: inputDecorationTheme,
@@ -75,7 +75,7 @@ class ThemeState extends Equatable {
   final bool m3;
 
   const ThemeState(this.data,
-      {this.isBright = false, this.m3 = ThemeCubit.m3_default});
+      {this.isBright = false, this.m3 = ThemeCubit.m3Default});
 
   @override
   List<Object?> get props => [data, isBright, m3];

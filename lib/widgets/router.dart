@@ -24,11 +24,13 @@ class RouteGenerator {
       case '/explore':
       case 'explore':
         final args = (settings.arguments ?? '') as String;
+        final title = args.isNotEmpty ? args : 'Root';
+
         if (!kIsWeb && Platform.isIOS) {
           return CupertinoPageRoute(
             builder: (context) => Scaffold(
                 appBar: CommonAppBar(
-                  title: args,
+                  title: title,
                 ),
                 body: NestedExplorer(path: args)),
           );
@@ -36,7 +38,7 @@ class RouteGenerator {
         return PageRouteBuilder(
           pageBuilder: (context, a1, a2) => Scaffold(
               appBar: CommonAppBar(
-                title: args,
+                title: title,
               ),
               body: NestedExplorer(path: args)),
           transitionsBuilder: (context, a1, a2, child) {

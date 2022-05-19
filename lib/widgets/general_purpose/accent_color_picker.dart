@@ -36,7 +36,7 @@ class _AccentColorPickerState extends State<AccentColorPicker> {
     return AlertDialog(
       title: const Text('Select a new color seed'),
       actions: [
-        MaterialButton(
+        ElevatedButton(
           onPressed: () {
             context.read<ThemeCubit>().setSeed(currentColor);
           },

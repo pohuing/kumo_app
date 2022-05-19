@@ -12,7 +12,7 @@ class PathPointManagementCubit extends Cubit<PathPointManagementState> {
   get anyChanged {
     var any = state.pathPoints
         .any((element) => element.isDirty || element.toBeDeleted);
-    log(any.toString(), name: runtimeType.toString() + '.anyChanged');
+    log(any.toString(), name: '$runtimeType.anyChanged');
     return any;
   }
 
@@ -43,7 +43,7 @@ class PathPointManagementCubit extends Cubit<PathPointManagementState> {
 class PathPointManagementState extends Equatable {
   final List<PathPoint> pathPoints;
 
-  PathPointManagementState(this.pathPoints);
+  const PathPointManagementState(this.pathPoints);
 
   @override
   List<Object?> get props => [pathPoints];
