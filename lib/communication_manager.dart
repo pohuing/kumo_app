@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:kumo_app/models/path_point.dart';
 
 import 'models/explore_result.dart';
 
@@ -29,8 +30,7 @@ class CommunicationManager {
       return [];
     }
     // log(response.body, name:runtimeType.toString());
-    var jsonDecoded =
-        jsonDecode(response.body); // as List<Map<String, dynamic>>;
+    final jsonDecoded = jsonDecode(response.body);
     return List.from(jsonDecoded)
         .map((e) => Map<String, dynamic>.from(e))
         .map((e) => ExploreResult.fromJSON(e))
@@ -73,5 +73,27 @@ class CommunicationManager {
     if (response.statusCode != 200) return false;
 
     return true;
+  }
+
+  Future<List<PathPoint>> getPathPoints() async {
+    final response = await client.get(
+      Uri.https(host, '/api/PathPoint'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${token!}'
+      },
+    );
+
+    if (response.statusCode != 200) {
+      log('Got non 200: $response');
+      return [];
+    }
+
+    final jsonDecoded = jsonDecode(response.body);
+
+    return List.from(jsonDecoded)
+        .map((e) => Map<String, dynamic>.from(e))
+        .map((e) => PathPoint.fromJSON(e))
+        .toList();
   }
 }

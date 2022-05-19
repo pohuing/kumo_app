@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kumo_app/widgets/general_purpose/common_app_bar.dart';
 import 'package:kumo_app/widgets/nested_explorer.dart';
+import 'package:kumo_app/widgets/path_point_management_view.dart';
 import 'package:kumo_app/widgets/sign_in_form.dart';
 import 'package:kumo_app/widgets/sign_up_screen.dart';
 
@@ -53,6 +54,9 @@ class RouteGenerator {
             );
           },
         );
+      case '/managePathPoints':
+        return MaterialPageRoute(
+            builder: (context) => const PathPointManagementView());
       case '/signup':
         return MaterialPageRoute(
           builder: (context) => const SignUpScreen(),

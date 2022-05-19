@@ -30,6 +30,12 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
           case OverflowActions.editTheme:
             await AccentColorPicker.showColorPickerDialog(context);
             break;
+          case OverflowActions.managePathPoints:
+            await Navigator.of(context).pushNamed('/managePathPoints');
+            break;
+          case OverflowActions.toggleM3:
+            context.read<ThemeCubit>().toggleM3();
+            break;
         }
       },
       itemBuilder: (context) {
@@ -55,6 +61,27 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
             ),
           ),
           PopupMenuItem(
+            value: OverflowActions.toggleM3,
+            child: Row(
+              children: [
+                const Text('Toggle M3'),
+                const Spacer(),
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: BlocBuilder<ThemeCubit, ThemeState>(
+                    builder: (context, state) => Text(
+                      textAlign: TextAlign.center,
+                      state.m3 ? '3' : '2',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          PopupMenuItem(
             value: OverflowActions.editTheme,
             child: Row(
               children: [
@@ -69,22 +96,41 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
           ),
           if (context.read<AuthenticationCubit>().state is SignedInState)
             PopupMenuItem(
-              value: OverflowActions.signOut,
+              value: OverflowActions.managePathPoints,
               child: Row(
                 children: [
-                  const Text('Sign out'),
+                  const Text('Manage Path Points'),
                   const Spacer(),
                   Icon(
-                    Icons.logout,
+                    Icons.settings,
                     color: Theme.of(context).colorScheme.primary,
                   )
                 ],
               ),
             ),
+          PopupMenuItem(
+            value: OverflowActions.signOut,
+            child: Row(
+              children: [
+                const Text('Sign out'),
+                const Spacer(),
+                Icon(
+                  Icons.logout,
+                  color: Theme.of(context).colorScheme.primary,
+                )
+              ],
+            ),
+          ),
         ];
       },
     );
   }
 }
 
-enum OverflowActions { signOut, toggleTheme, editTheme }
+enum OverflowActions {
+  signOut,
+  toggleTheme,
+  editTheme,
+  managePathPoints,
+  toggleM3
+}
