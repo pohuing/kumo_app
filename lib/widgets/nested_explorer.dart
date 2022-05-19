@@ -79,7 +79,7 @@ class FileWidget extends StatelessWidget {
     }
 
     return ListTile(
-      dense: true,
+      dense: false,
       leading: icon,
       title: Text(data.name),
       onTap: data.fileSystemEntityType == FileSystemEntryType.directory

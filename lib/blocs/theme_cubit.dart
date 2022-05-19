@@ -64,7 +64,7 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
 
   void setSeed(Color color) {
     seed = color;
-    emit(ThemeState(getTheme(isBright: state.isBright),
+    emit(ThemeState(getTheme(isBright: state.isBright, m3: state.m3),
         isBright: state.isBright, m3: state.m3));
   }
 }

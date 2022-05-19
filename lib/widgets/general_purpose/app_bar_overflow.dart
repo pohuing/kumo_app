@@ -72,7 +72,7 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
                   child: BlocBuilder<ThemeCubit, ThemeState>(
                     builder: (context, state) => Text(
                       textAlign: TextAlign.center,
-                      state.m3 ? '3' : '2',
+                      !state.m3 ? '3' : '2',
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: Theme.of(context).colorScheme.primary),
                     ),

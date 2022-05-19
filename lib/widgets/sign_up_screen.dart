@@ -30,7 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.all(16),
             children: [
-              const Text('Email:'),
+              Text('Email:', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _emailController,
@@ -46,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              const Text('Password:'),
+              Text('Password:', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordController,
@@ -61,7 +61,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              const Text('Repeat password:'),
+              Text('Repeat password:',
+                  style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordRepeatController,
