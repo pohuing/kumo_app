@@ -9,8 +9,9 @@ class AccentColorPicker extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  static Future<void> showColorPickerDialog(BuildContext context){
-    return showDialog(context: context, builder: (context) => const AccentColorPicker());
+  static Future<void> showColorPickerDialog(BuildContext context) {
+    return showDialog(
+        context: context, builder: (context) => const AccentColorPicker());
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:kumo_app/communication_manager.dart';
 
 class PathPoint extends Equatable {
   final String id;
@@ -34,5 +35,19 @@ class PathPoint extends Equatable {
     final bool isRoot = e['isRoot'];
 
     return PathPoint(id, path, isRoot);
+  }
+
+  Future<bool> delete() async {
+    return await CommunicationManager.instance.deletePathPoint(this);
+  }
+
+  Future<PathPoint?> update() async {
+    final result = await CommunicationManager.instance.updatePathPoint(this);
+
+    if (result) {
+      return PathPoint(id, path, isRoot);
+    }
+
+    return null;
   }
 }

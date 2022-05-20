@@ -38,6 +38,22 @@ class PathPointManagementCubit extends Cubit<PathPointManagementState> {
     newPathPoints.replaceRange(index, index + 1, [newPoint]);
     emit(PathPointManagementState(newPathPoints));
   }
+
+  Future<void> save() async {
+    List<Future> futures = [];
+    futures.addAll(state.pathPoints
+        .where((element) => element.toBeDeleted)
+        .map((e) => e.delete())
+        .toList());
+
+    futures.addAll(state.pathPoints
+        .where((element) => element.isDirty && !element.toBeDeleted)
+        .map((e) => e.update())
+        .toList());
+
+    await Future.wait(futures);
+    await loadPoints();
+  }
 }
 
 class PathPointManagementState extends Equatable {

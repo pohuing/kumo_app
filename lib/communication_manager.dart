@@ -96,4 +96,30 @@ class CommunicationManager {
         .map((e) => PathPoint.fromJSON(e))
         .toList();
   }
+
+  Future<bool> deletePathPoint(PathPoint pathPoint) async {
+    final response = await client
+        .delete(Uri.https(host, '/api/PathPoint/${pathPoint.id}'), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${token!}'
+    });
+
+    return response.statusCode == 200;
+  }
+
+  Future<bool> updatePathPoint(PathPoint pathPoint) async {
+    final response = await client.put(Uri.https(host, '/api/PathPoint'),
+        body: jsonEncode({
+          'id': pathPoint.id,
+          'path': pathPoint.path,
+          'isRoot': pathPoint.isRoot,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${token!}',
+        });
+    log('${response.reasonPhrase ?? response.statusCode.toString()}: ${response.body}',
+        name: '$runtimeType.updatePathPoint');
+    return response.statusCode == 200;
+  }
 }
