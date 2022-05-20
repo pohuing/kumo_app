@@ -6,3 +6,4 @@ linter:
     - overridden_fields
     - annotate_overrides
     - unnecessary_overrides
+    - require_trailing_commas

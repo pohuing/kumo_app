@@ -12,6 +12,14 @@ class AppBarOverflow extends StatefulWidget {
   State<AppBarOverflow> createState() => _AppBarOverflowState();
 }
 
+enum OverflowActions {
+  signOut,
+  toggleTheme,
+  editTheme,
+  managePathPoints,
+  toggleM3
+}
+
 class _AppBarOverflowState extends State<AppBarOverflow> {
   @override
   Widget build(BuildContext context) {
@@ -74,7 +82,8 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
                       textAlign: TextAlign.center,
                       !state.m3 ? '3' : '2',
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                     ),
                   ),
                 )
@@ -125,12 +134,4 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
       },
     );
   }
-}
-
-enum OverflowActions {
-  signOut,
-  toggleTheme,
-  editTheme,
-  managePathPoints,
-  toggleM3
 }

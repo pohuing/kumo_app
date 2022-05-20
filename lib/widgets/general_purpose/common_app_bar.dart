@@ -6,10 +6,13 @@ class CommonAppBar extends AppBar {
 
   CommonAppBar({Key? key, required String title, List<Widget>? actions})
       : _title = title,
-        super(key: key, actions: [
-          ...?actions,
-          const AppBarOverflow(),
-        ]);
+        super(
+          key: key,
+          actions: [
+            ...?actions,
+            const AppBarOverflow(),
+          ],
+        );
 
   @override
   Widget get title => SingleChildScrollView(

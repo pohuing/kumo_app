@@ -48,8 +48,10 @@ class _AdditionFormState extends State<AdditionForm> {
               const SizedBox(height: 16),
               Row(
                 children: [
-                  Text('Is Root:',
-                      style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    'Is Root:',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   Checkbox(
                     value: isRoot,
                     onChanged: (v) {
@@ -67,6 +69,7 @@ class _AdditionFormState extends State<AdditionForm> {
                       final res = await widget.cubit.addPoint(path, isRoot);
                       setState(() => saveFailed = !res);
                       if (res) {
+                        // ignore: use_build_context_synchronously
                         Navigator.of(context).pop();
                         await widget.cubit.loadPoints();
                       }

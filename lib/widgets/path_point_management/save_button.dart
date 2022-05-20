@@ -12,8 +12,9 @@ class SaveButton extends StatelessWidget {
     return BlocBuilder<PathPointManagementCubit, PathPointManagementState>(
       bloc: cubit,
       builder: (context, state) => IconButton(
-          onPressed: cubit.anyChanged ? cubit.save : null,
-          icon: const Icon(Icons.save)),
+        onPressed: cubit.anyChanged ? cubit.save : null,
+        icon: const Icon(Icons.save),
+      ),
     );
   }
 }

@@ -74,7 +74,8 @@ class _SignInFormState extends State<SignInForm> {
                 builder: (context, state) {
                   if (state is SigningInState) {
                     return const Center(
-                        child: CircularProgressIndicator.adaptive());
+                      child: CircularProgressIndicator.adaptive(),
+                    );
                   }
                   return ElevatedButton(
                     onPressed: signInAction,
@@ -85,10 +86,11 @@ class _SignInFormState extends State<SignInForm> {
               MaterialButton(
                 onPressed: () async {
                   final result = await Navigator.push<List<String>>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignUpScreen(),
-                      ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpScreen(),
+                    ),
+                  );
                   if (result is List<String> && result.length == 2) {
                     _emailController.text = result.first;
                     _passwordController.text = result.last;

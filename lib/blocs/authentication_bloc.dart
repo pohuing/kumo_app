@@ -3,14 +3,14 @@ import 'dart:developer';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:kumo_app/communication_manager.dart';
 
-class AuthenticationCubit extends HydratedCubit<AuthenticationState>{
+class AuthenticationCubit extends HydratedCubit<AuthenticationState> {
   AuthenticationCubit() : super(SignedOutState());
 
   @override
   AuthenticationState? fromJson(Map<String, dynamic> json) {
     log(json.toString(), name: '$runtimeType.fromJson');
 
-    if(json.containsKey('type')){
+    if (json.containsKey('type')) {
       return AuthenticationState(json);
     }
 
@@ -19,12 +19,13 @@ class AuthenticationCubit extends HydratedCubit<AuthenticationState>{
 
   Future<bool> signIn(String email, String password) async {
     if (state is SignedInState) {
-      log('Tried signing in despite being signed in', name: '$runtimeType.signIn()');
+      log('Tried signing in despite being signed in',
+          name: '$runtimeType.signIn()');
     }
     emit(SigningInState());
 
     final res = await CommunicationManager.instance.signIn(email, password);
-    if(res) {
+    if (res) {
       emit(SignedInState(email, CommunicationManager.instance.token!));
     } else {
       emit(SignInErrorState('Login failed'));
@@ -38,13 +39,13 @@ class AuthenticationCubit extends HydratedCubit<AuthenticationState>{
   }
 
   Future<bool> signUp(String email, String password) async {
-    if(state is SignedInState) {
+    if (state is SignedInState) {
       log('Tried creating a new account despite already being signed in');
     }
     emit(SigningInState());
     final res = await CommunicationManager.instance.signUp(email, password);
 
-    if(res) {
+    if (res) {
       emit(SignedOutState());
     } else {
       emit(SignInErrorState('Failed'));
@@ -61,19 +62,20 @@ class AuthenticationCubit extends HydratedCubit<AuthenticationState>{
 }
 
 abstract class AuthenticationState {
-  factory AuthenticationState(Map<String, dynamic> json){
+  factory AuthenticationState(Map<String, dynamic> json) {
     log(json.toString(), name: '${AuthenticationState}factory');
 
-    if (json['type'] == (SignedInState).toString()){
+    if (json['type'] == (SignedInState).toString()) {
       return SignedInState.fromJson(json);
-    }else{
+    } else {
       return SignedOutState.fromJson(json);
     }
   }
 
   Map<String, dynamic> toJson();
 }
-class SignedInState implements AuthenticationState{
+
+class SignedInState implements AuthenticationState {
   final String email;
   final String token;
 
@@ -95,13 +97,15 @@ class SignedInState implements AuthenticationState{
   }
 }
 
-class SignedOutState implements AuthenticationState{
+class SignedOutState implements AuthenticationState {
   @override
   Map<String, dynamic> toJson() {
-    return {'type': (SignedOutState).toString(),};
+    return {
+      'type': (SignedOutState).toString(),
+    };
   }
 
-  static SignedOutState fromJson(Map json){
+  static SignedOutState fromJson(Map json) {
     return SignedOutState();
   }
 }
@@ -111,13 +115,15 @@ class SignInErrorState implements AuthenticationState {
 
   SignInErrorState(this.cause);
 
-  SignInErrorState fromJson(Map<String, dynamic> json){
+  SignInErrorState fromJson(Map<String, dynamic> json) {
     return SignInErrorState(json['cause']);
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {'type': (SignedOutState).toString(),};
+    return {
+      'type': (SignedOutState).toString(),
+    };
   }
 
   @override
@@ -126,9 +132,11 @@ class SignInErrorState implements AuthenticationState {
   }
 }
 
-class SigningInState implements AuthenticationState{
+class SigningInState implements AuthenticationState {
   @override
   Map<String, dynamic> toJson() {
-    return {'type': (SignedOutState).toString(),};
+    return {
+      'type': (SignedOutState).toString(),
+    };
   }
 }

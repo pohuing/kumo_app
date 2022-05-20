@@ -61,8 +61,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              Text('Repeat password:',
-                  style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                'Repeat password:',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordRepeatController,
@@ -82,7 +84,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 builder: (context, state) {
                   if (state is SigningInState) {
                     return const Center(
-                        child: CircularProgressIndicator.adaptive());
+                      child: CircularProgressIndicator.adaptive(),
+                    );
                   }
                   return ElevatedButton(
                     onPressed: signupAction,

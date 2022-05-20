@@ -24,27 +24,30 @@ class RouteGenerator {
         );
       case '/explore':
       case 'explore':
-        final args =
-            (settings.arguments ?? Tuple2('', false)) as Tuple2<String, bool>;
+        final args = (settings.arguments ?? const Tuple2('', false))
+            as Tuple2<String, bool>;
         final title = args.item1.isNotEmpty ? args.item1 : 'Root';
 
         if (!kIsWeb && Platform.isIOS) {
           return CupertinoPageRoute(
             builder: (context) => Scaffold(
-                appBar: CommonAppBar(
-                  title: title,
-                ),
-                body: NestedExplorer(path: args.item1)),
+              appBar: CommonAppBar(
+                title: title,
+              ),
+              body: NestedExplorer(path: args.item1),
+            ),
           );
         }
         return PageRouteBuilder(
           pageBuilder: (context, a1, a2) => Scaffold(
-              appBar: CommonAppBar(
-                title: title,
-              ),
-              body: NestedExplorer(path: args.item1)),
+            appBar: CommonAppBar(
+              title: title,
+            ),
+            body: NestedExplorer(path: args.item1),
+          ),
           transitionsBuilder: (context, a1, a2, child) {
-            final begin = !args.item2 ? Offset(1, 0) : Offset(0, -1);
+            final begin =
+                !args.item2 ? const Offset(1, 0) : const Offset(0, -1);
             const end = Offset.zero;
             const curve = Curves.ease;
 
@@ -60,14 +63,16 @@ class RouteGenerator {
         );
       case '/managePathPoints':
         return MaterialPageRoute(
-            builder: (context) => const PathPointManagementView());
+          builder: (context) => const PathPointManagementView(),
+        );
       case '/signup':
         return MaterialPageRoute(
           builder: (context) => const SignUpScreen(),
         );
       default:
         return MaterialPageRoute(
-            builder: (context) => Text(settings.toString()));
+          builder: (context) => Text(settings.toString()),
+        );
     }
   }
 }
