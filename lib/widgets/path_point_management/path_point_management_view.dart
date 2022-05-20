@@ -48,6 +48,7 @@ class _PathPointManagementViewState extends State<PathPointManagementView> {
             child: ListView.builder(
               primary: true,
               itemBuilder: (context, index) => ExpansionTile(
+                key: Key(state.pathPoints[index].id),
                 title: Text(state.pathPoints[index].path),
                 children: [
                   ButtonBar(
@@ -56,11 +57,12 @@ class _PathPointManagementViewState extends State<PathPointManagementView> {
                           child: Row(
                             children: [
                               const Text('Is Root:'),
-                              Icon(
-                                state.pathPoints[index].isRoot
-                                    ? Icons.check_box
-                                    : Icons.check_box_outline_blank,
-                                color: Theme.of(context).colorScheme.primary,
+                              IgnorePointer(
+                                child: Checkbox(
+                                  visualDensity: VisualDensity.compact,
+                                  value: state.pathPoints[index].isRoot,
+                                  onChanged: (v) => null,
+                                ),
                               ),
                             ],
                           ),

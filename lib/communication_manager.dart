@@ -122,4 +122,20 @@ class CommunicationManager {
         name: '$runtimeType.updatePathPoint');
     return response.statusCode == 200;
   }
+
+  Future<bool> addPoint(String path, bool isRoot) async {
+    final response = await client.post(Uri.https(host, '/api/PathPoint'),
+        body: jsonEncode({
+          'path': path,
+          'isRoot': isRoot,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${token!}',
+        });
+
+    log('${response.reasonPhrase ?? response.statusCode.toString()}: ${response.body}',
+        name: '$runtimeType.addPoint');
+    return response.statusCode < 300 && response.statusCode >= 200;
+  }
 }

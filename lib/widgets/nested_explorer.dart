@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kumo_app/communication_manager.dart';
 import 'package:kumo_app/models/explore_result.dart';
 import 'package:kumo_app/widgets/general_purpose/accent_color_picker.dart';
+import 'package:tuple/tuple.dart';
 
 class NestedExplorer extends StatefulWidget {
   final String path;
@@ -17,25 +18,33 @@ class _NestedExplorerState extends State<NestedExplorer> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ExploreResult>>(
-      future: future,
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-          case ConnectionState.active:
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
-          case ConnectionState.done:
-            return ListView.builder(
-              itemBuilder: (context, index) => FileWidget(
+    return RefreshIndicator(
+      onRefresh: () {
+        Navigator.pushReplacementNamed(context, 'explore',
+            arguments: Tuple2(widget.path, true));
+        return Future.value(null);
+      },
+      child: FutureBuilder<List<ExploreResult>>(
+        future: future,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            case ConnectionState.done:
+              return ListView.builder(
+                primary: true,
+                itemBuilder: (context, index) => FileWidget(
                   data: snapshot.data![index],
                 ),
-              itemCount: snapshot.data!.length,
-            );
-        }
-      },
+                itemCount: snapshot.data!.length,
+              );
+          }
+        },
+      ),
     );
   }
 
@@ -83,8 +92,9 @@ class FileWidget extends StatelessWidget {
       leading: icon,
       title: Text(data.name),
       onTap: data.fileSystemEntityType == FileSystemEntryType.directory
-          ? () => Navigator.of(context)
-              .pushNamed('/explore', arguments: data.absolutePath)
+          ? () =>
+          Navigator.of(context).pushNamed('/explore',
+              arguments: Tuple2(data.absolutePath, false))
           : null,
     );
   }

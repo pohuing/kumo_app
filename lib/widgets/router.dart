@@ -8,6 +8,7 @@ import 'package:kumo_app/widgets/nested_explorer.dart';
 import 'package:kumo_app/widgets/path_point_management/path_point_management_view.dart';
 import 'package:kumo_app/widgets/sign_in_form.dart';
 import 'package:kumo_app/widgets/sign_up_screen.dart';
+import 'package:tuple/tuple.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -23,8 +24,9 @@ class RouteGenerator {
         );
       case '/explore':
       case 'explore':
-        final args = (settings.arguments ?? '') as String;
-        final title = args.isNotEmpty ? args : 'Root';
+        final args =
+            (settings.arguments ?? Tuple2('', false)) as Tuple2<String, bool>;
+        final title = args.item1.isNotEmpty ? args.item1 : 'Root';
 
         if (!kIsWeb && Platform.isIOS) {
           return CupertinoPageRoute(
@@ -32,7 +34,7 @@ class RouteGenerator {
                 appBar: CommonAppBar(
                   title: title,
                 ),
-                body: NestedExplorer(path: args)),
+                body: NestedExplorer(path: args.item1)),
           );
         }
         return PageRouteBuilder(
@@ -40,9 +42,9 @@ class RouteGenerator {
               appBar: CommonAppBar(
                 title: title,
               ),
-              body: NestedExplorer(path: args)),
+              body: NestedExplorer(path: args.item1)),
           transitionsBuilder: (context, a1, a2, child) {
-            const begin = Offset(1, 0);
+            final begin = !args.item2 ? Offset(1, 0) : Offset(0, -1);
             const end = Offset.zero;
             const curve = Curves.ease;
 

@@ -54,6 +54,10 @@ class PathPointManagementCubit extends Cubit<PathPointManagementState> {
     await Future.wait(futures);
     await loadPoints();
   }
+
+  Future<bool> addPoint(String path, bool isRoot) async {
+    return CommunicationManager.instance.addPoint(path, isRoot);
+  }
 }
 
 class PathPointManagementState extends Equatable {
