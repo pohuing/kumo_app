@@ -19,8 +19,10 @@ class AuthenticationCubit extends HydratedCubit<AuthenticationState> {
 
   Future<bool> signIn(String email, String password) async {
     if (state is SignedInState) {
-      log('Tried signing in despite being signed in',
-          name: '$runtimeType.signIn()');
+      log(
+        'Tried signing in despite being signed in',
+        name: '$runtimeType.signIn()',
+      );
     }
     emit(SigningInState());
 

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kumo_app/blocs/authentication_bloc.dart';
 import 'package:kumo_app/widgets/sign_up_screen.dart';
+import 'package:tuple/tuple.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -41,6 +42,7 @@ class _SignInFormState extends State<SignInForm> {
               Text('Email:', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               TextFormField(
+                key: const Key('email'),
                 controller: _emailController,
                 autofillHints: const [AutofillHints.email],
                 keyboardType: TextInputType.emailAddress,
@@ -57,6 +59,7 @@ class _SignInFormState extends State<SignInForm> {
               Text('Password:', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               TextFormField(
+                key: const Key('password'),
                 controller: _passwordController,
                 autofillHints: const [AutofillHints.password],
                 keyboardType: TextInputType.visiblePassword,
@@ -78,6 +81,7 @@ class _SignInFormState extends State<SignInForm> {
                     );
                   }
                   return ElevatedButton(
+                    key: const Key('log_in_button'),
                     onPressed: signInAction,
                     child: const Text('Sign in'),
                   );
@@ -122,7 +126,7 @@ class _SignInFormState extends State<SignInForm> {
         .read<AuthenticationCubit>()
         .signIn(_emailController.text, _passwordController.text)) {
       await Navigator.of(context)
-          .pushReplacementNamed('/explore', arguments: '');
+          .pushReplacementNamed('/explore', arguments: const Tuple2('', false));
     }
   }
 }

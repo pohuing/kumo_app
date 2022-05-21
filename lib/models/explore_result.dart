@@ -7,8 +7,13 @@ class ExploreResult extends Equatable {
   final bool canDelete;
   final FileSystemEntryType fileSystemEntityType;
 
-  const ExploreResult(this.name, this.absolutePath, this.canWrite,
-      this.canDelete, this.fileSystemEntityType);
+  const ExploreResult(
+    this.name,
+    this.absolutePath,
+    this.canWrite,
+    this.canDelete,
+    this.fileSystemEntityType,
+  );
 
   @override
   List<Object?> get props => [name, absolutePath, canWrite, canDelete];
@@ -22,7 +27,12 @@ class ExploreResult extends Equatable {
         FileSystemEntryType.values[data['fileSystemEntryType']];
 
     return ExploreResult(
-        name, absolutePath, canWrite, canDelete, fileSystemEntryType);
+      name,
+      absolutePath,
+      canWrite,
+      canDelete,
+      fileSystemEntryType,
+    );
   }
 }
 
