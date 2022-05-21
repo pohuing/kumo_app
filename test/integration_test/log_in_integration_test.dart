@@ -10,13 +10,17 @@ void main() {
 
   group('log-in test', () {
     testWidgets('verify log in behaviour', (widgetTester) async {
-      app.main();
+      await app.main(runningAsTest: true);
       await widgetTester.pumpAndSettle();
       expect(find.byKey(const Key('email')), findsOneWidget);
       await widgetTester.enterText(
-          find.byKey(const Key('email')), 'admin@mail.com');
+        find.byKey(const Key('email')),
+        'admin@mail.com',
+      );
       await widgetTester.enterText(
-          find.byKey(const Key('password')), 'admin123');
+        find.byKey(const Key('password')),
+        'admin123',
+      );
       await widgetTester.pumpAndSettle();
       await widgetTester.tap(find.byKey(const Key('log_in_button')));
 

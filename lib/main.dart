@@ -11,10 +11,12 @@ import 'package:kumo_app/widgets/router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+Future<void> main({List<String>? args, bool? runningAsTest = false}) async {
+  runningAsTest ??= false;
   if (kDebugMode || true) {
     HttpOverrides.global = DevHttpOverrides();
   }
+  if (runningAsTest) {}
 
   HydratedBlocOverrides.runZoned(
     () => runApp(
@@ -29,11 +31,14 @@ void main() async {
     createStorage: () async {
       WidgetsFlutterBinding.ensureInitialized();
 
-      return await HydratedStorage.build(
+      var hydratedStorage = await HydratedStorage.build(
         storageDirectory: kIsWeb
             ? HydratedStorage.webStorageDirectory
             : await getApplicationDocumentsDirectory(),
       );
+
+      if (runningAsTest!) await hydratedStorage.clear();
+      return hydratedStorage;
     },
   );
 }
