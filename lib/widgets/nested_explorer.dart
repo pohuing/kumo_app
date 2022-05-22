@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kumo_app/communication_manager.dart';
 import 'package:kumo_app/models/explore_result.dart';
-import 'package:kumo_app/widgets/general_purpose/accent_color_picker.dart';
+import 'package:kumo_app/widgets/general_purpose/app_bar_overflow.dart';
 import 'package:tuple/tuple.dart';
 
 class FileWidget extends StatelessWidget {
@@ -55,28 +55,46 @@ class _NestedExplorerState extends State<NestedExplorer> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: refreshAction,
-      child: FutureBuilder<List<ExploreResult>>(
-        future: future,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-            case ConnectionState.active:
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            case ConnectionState.done:
-              return ListView.builder(
-                primary: true,
-                itemBuilder: (context, index) => FileWidget(
-                  data: snapshot.data![index],
-                ),
-                itemCount: snapshot.data!.length,
-              );
-          }
+    return Scaffold(
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          var title = widget.path.isEmpty ? 'Root' : widget.path;
+          return [
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              title: Text(title),
+              actions: const [
+                AppBarOverflow(),
+              ],
+            ),
+          ];
         },
+        body: RefreshIndicator(
+          onRefresh: refreshAction,
+          child: FutureBuilder<List<ExploreResult>>(
+            future: future,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                case ConnectionState.active:
+                  return const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                case ConnectionState.done:
+                  return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    primary: true,
+                    itemBuilder: (context, index) => FileWidget(
+                      data: snapshot.data![index],
+                    ),
+                    itemCount: snapshot.data!.length,
+                  );
+              }
+            },
+          ),
+        ),
       ),
     );
   }
@@ -92,16 +110,6 @@ class _NestedExplorerState extends State<NestedExplorer> {
       context,
       'explore',
       arguments: Tuple2(widget.path, true),
-    );
-  }
-
-  Future<void> showColorPicker() async {
-    await showDialog(
-      barrierColor: Colors.transparent,
-      context: context,
-      builder: (context) {
-        return const AccentColorPicker();
-      },
     );
   }
 }

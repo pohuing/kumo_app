@@ -26,25 +26,14 @@ class RouteGenerator {
       case 'explore':
         final args = (settings.arguments ?? const Tuple2('', false))
             as Tuple2<String, bool>;
-        final title = args.item1.isNotEmpty ? args.item1 : 'Root';
 
         if (!kIsWeb && Platform.isIOS) {
           return CupertinoPageRoute(
-            builder: (context) => Scaffold(
-              appBar: CommonAppBar(
-                title: title,
-              ),
-              body: NestedExplorer(path: args.item1),
-            ),
+            builder: (context) => NestedExplorer(path: args.item1),
           );
         }
         return PageRouteBuilder(
-          pageBuilder: (context, a1, a2) => Scaffold(
-            appBar: CommonAppBar(
-              title: title,
-            ),
-            body: NestedExplorer(path: args.item1),
-          ),
+          pageBuilder: (context, a1, a2) => NestedExplorer(path: args.item1),
           transitionsBuilder: (context, a1, a2, child) {
             final begin =
                 !args.item2 ? const Offset(1, 0) : const Offset(0, -1);
