@@ -25,14 +25,18 @@ class AuthenticationCubit extends HydratedCubit<AuthenticationState> {
       );
     }
     emit(SigningInState());
-
-    final res = await CommunicationManager.instance.signIn(email, password);
-    if (res) {
-      emit(SignedInState(email, CommunicationManager.instance.token!));
-    } else {
-      emit(SignInErrorState('Login failed'));
+    try {
+      final res = await CommunicationManager.instance.signIn(email, password);
+      if (res) {
+        emit(SignedInState(email, CommunicationManager.instance.token!));
+      } else {
+        emit(SignInErrorState('Login failed'));
+      }
+      return res;
+    } catch (e) {
+      emit(SignInErrorState(e.toString()));
+      return false;
     }
-    return res;
   }
 
   Future<void> signOut() async {
