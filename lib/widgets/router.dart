@@ -29,10 +29,12 @@ class RouteGenerator {
 
         if (!kIsWeb && Platform.isIOS) {
           return CupertinoPageRoute(
+            settings: settings,
             builder: (context) => NestedExplorer(path: args.item1),
           );
         }
         return PageRouteBuilder(
+          settings: settings,
           pageBuilder: (context, a1, a2) => NestedExplorer(path: args.item1),
           transitionsBuilder: (context, a1, a2, child) {
             final begin =

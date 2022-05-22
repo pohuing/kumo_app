@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kumo_app/communication_manager.dart';
 import 'package:kumo_app/models/explore_result.dart';
+import 'package:kumo_app/widgets/explorer/tappable_crubs.dart';
 import 'package:kumo_app/widgets/general_purpose/app_bar_overflow.dart';
 import 'package:tuple/tuple.dart';
 
@@ -23,12 +24,15 @@ class _NestedExplorerState extends State<NestedExplorer> {
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          var title = widget.path.isEmpty ? 'Root' : widget.path;
           return [
             SliverAppBar(
               floating: true,
               snap: true,
-              title: Text(title),
+              title: widget.path.isNotEmpty
+                  ? TappableCrumbs(
+                      path: widget.path,
+                    )
+                  : Text('Explorer'),
               actions: const [
                 AppBarOverflow(),
               ],
