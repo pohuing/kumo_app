@@ -13,15 +13,22 @@ class AccentColorPicker extends StatefulWidget {
   State<AccentColorPicker> createState() => _AccentColorPickerState();
 
   static Future<void> showColorPickerDialog(BuildContext context) {
-    return showDialog(
+    return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      enableDrag: false,
       builder: (context) => const AccentColorPicker(),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+      ),
     );
   }
 }
 
 class _AccentColorPickerState extends State<AccentColorPicker> {
-  Color currentColor = Colors.white;
+  late Color currentColor;
 
   @override
   Widget build(BuildContext context) {
@@ -30,85 +37,88 @@ class _AccentColorPickerState extends State<AccentColorPicker> {
     var darkScheme =
         ThemeCubit.getTheme(isBright: false, seed: currentColor).colorScheme;
 
-    return AlertDialog(
-      title: const Text('Select a new color seed'),
-      actions: [
-        ElevatedButton(
-          onPressed: () {
-            context.read<ThemeCubit>().setSeed(currentColor);
-          },
-          child: Text(
-            'Save color',
+    return DraggableScrollableSheet(
+      expand: true,
+      initialChildSize: 1,
+      snapSizes: [1],
+      snap: true,
+      builder: (context, controller) => Column(
+        children: [
+          AppBar(title: const Text('Select a new color seed')),
+          ColorPicker(
+            enableAlpha: false,
+            pickerColor: currentColor,
+            onColorChanged: (color) => setState(() => currentColor = color),
+            displayThumbColor: true,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Bright theme',
             style: Theme.of(context).textTheme.titleMedium,
           ),
-        )
-      ],
-      content: SingleChildScrollView(
-        child: Column(
-          children: [
-            ColorPicker(
-              enableAlpha: false,
-              pickerColor: currentColor,
-              onColorChanged: (color) => setState(() => currentColor = color),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Bright theme',
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Flexible(
+                child: Container(
+                  height: 10,
+                  color: brightScheme.primary,
+                ),
+              ),
+              Flexible(
+                child: Container(
+                  height: 10,
+                  color: brightScheme.secondary,
+                ),
+              ),
+              Flexible(
+                child: Container(
+                  height: 10,
+                  color: brightScheme.tertiary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Dark theme',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Flexible(
+                child: Container(
+                  height: 10,
+                  color: darkScheme.primary,
+                ),
+              ),
+              Flexible(
+                child: Container(
+                  height: 10,
+                  color: darkScheme.secondary,
+                ),
+              ),
+              Flexible(
+                child: Container(
+                  height: 10,
+                  color: darkScheme.tertiary,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              context.read<ThemeCubit>().setSeed(currentColor);
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Save color',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Flexible(
-                  child: Container(
-                    height: 10,
-                    color: brightScheme.primary,
-                  ),
-                ),
-                Flexible(
-                  child: Container(
-                    height: 10,
-                    color: brightScheme.secondary,
-                  ),
-                ),
-                Flexible(
-                  child: Container(
-                    height: 10,
-                    color: brightScheme.tertiary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Dark theme',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Flexible(
-                  child: Container(
-                    height: 10,
-                    color: darkScheme.primary,
-                  ),
-                ),
-                Flexible(
-                  child: Container(
-                    height: 10,
-                    color: darkScheme.secondary,
-                  ),
-                ),
-                Flexible(
-                  child: Container(
-                    height: 10,
-                    color: darkScheme.tertiary,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

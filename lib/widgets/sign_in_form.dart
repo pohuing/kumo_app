@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_import
 
+import 'dart:math';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +32,9 @@ class _SignInFormState extends State<SignInForm> {
         listener: (context, state) =>
             ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            duration: Duration(
+                milliseconds:
+                    max(4000, (state as SignInErrorState).cause.length * 100)),
             content: Text((state as SignInErrorState).cause),
           ),
         ),
