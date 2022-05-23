@@ -17,7 +17,8 @@ enum OverflowActions {
   toggleTheme,
   editTheme,
   managePathPoints,
-  toggleM3
+  toggleM3,
+  managePermissions
 }
 
 class _AppBarOverflowState extends State<AppBarOverflow> {
@@ -43,6 +44,9 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
             break;
           case OverflowActions.toggleM3:
             context.read<ThemeCubit>().toggleM3();
+            break;
+          case OverflowActions.managePermissions:
+            await Navigator.pushNamed(context, '/managePermissions');
             break;
         }
       },
@@ -114,6 +118,20 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
                     Icons.settings,
                     color: Theme.of(context).colorScheme.primary,
                   )
+                ],
+              ),
+            ),
+          if (context.read<AuthenticationCubit>().state is SignedInState)
+            PopupMenuItem(
+              value: OverflowActions.managePermissions,
+              child: Row(
+                children: [
+                  Text('Manage Permissions'),
+                  Spacer(),
+                  Icon(
+                    Icons.security,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ],
               ),
             ),
