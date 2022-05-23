@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/communication_manager.dart';
+import 'package:kumo_app/systems/communication_manager.dart';
 
 import '../models/path_point.dart';
 

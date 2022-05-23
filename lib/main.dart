@@ -6,8 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:kumo_app/blocs/authentication_bloc.dart';
 import 'package:kumo_app/blocs/theme_cubit.dart';
-import 'package:kumo_app/dev_http_overrides.dart';
-import 'package:kumo_app/widgets/router.dart';
+import 'package:kumo_app/systems/dev_http_overrides.dart';
+import 'package:kumo_app/systems/router.dart';
+import 'package:kumo_app/systems/url_strategy/url_strategy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +17,7 @@ Future<void> main({List<String>? args, bool? runningAsTest = false}) async {
   if (kDebugMode || true) {
     HttpOverrides.global = DevHttpOverrides();
   }
-  if (runningAsTest) {}
+  usePathUrlStrategy();
 
   HydratedBlocOverrides.runZoned(
     () => runApp(

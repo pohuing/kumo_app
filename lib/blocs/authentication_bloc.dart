@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:kumo_app/communication_manager.dart';
+import 'package:kumo_app/systems/communication_manager.dart';
 
 class AuthenticationCubit extends HydratedCubit<AuthenticationState> {
   AuthenticationCubit() : super(SignedOutState());

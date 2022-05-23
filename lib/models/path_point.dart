@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:kumo_app/communication_manager.dart';
+import 'package:kumo_app/systems/communication_manager.dart';
 
 class PathPoint extends Equatable {
   final String id;

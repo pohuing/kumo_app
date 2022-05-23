@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kumo_app/communication_manager.dart';
 import 'package:kumo_app/models/explore_result.dart';
+import 'package:kumo_app/systems/communication_manager.dart';
 import 'package:kumo_app/widgets/explorer/tappable_crubs.dart';
 import 'package:kumo_app/widgets/general_purpose/app_bar_overflow.dart';
 import 'package:tuple/tuple.dart';
