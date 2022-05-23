@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kumo_app/blocs/path_point_cubit.dart';
-import 'package:kumo_app/widgets/path_point_management/add_button.dart';
+import 'package:kumo_app/widgets/general_purpose/common_fab.dart';
+import 'package:kumo_app/widgets/general_purpose/material_adaptive_scaffold.dart';
+import 'package:kumo_app/widgets/path_point_management/addition_form.dart';
 import 'package:kumo_app/widgets/path_point_management/path_point_management_view_expansion_tile.dart';
 import 'package:kumo_app/widgets/path_point_management/save_button.dart';
-
-import '../general_purpose/common_app_bar.dart';
 
 class PathPointManagementView extends StatefulWidget {
   const PathPointManagementView({Key? key}) : super(key: key);
@@ -20,29 +20,10 @@ class _PathPointManagementViewState extends State<PathPointManagementView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CommonAppBar(
-        title: 'Manage Path Points',
-        actions: [
-          if (!Theme.of(context).useMaterial3) SaveButton(cubit: cubit),
-        ],
-      ),
-      floatingActionButton:
-          !Theme.of(context).useMaterial3 ? AddButton(cubit: cubit) : null,
-      bottomNavigationBar: Theme.of(context).useMaterial3
-          ? BottomAppBar(
-              child: Row(
-                children: [
-                  SaveButton(cubit: cubit),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: AddButton(cubit: cubit),
-                  ),
-                ],
-              ),
-            )
-          : null,
+    return MaterialAdaptiveScaffold(
+      actions: [
+        SaveButton(cubit: cubit),
+      ],
       body: BlocBuilder<PathPointManagementCubit, PathPointManagementState>(
         bloc: cubit,
         builder: (context, state) => RefreshIndicator(
@@ -54,15 +35,17 @@ class _PathPointManagementViewState extends State<PathPointManagementView> {
               return PathPointManagementViewExpansionTile(
                 cubit: cubit,
                 path: point.path,
-                isRoot: point.isRoot,
-                id: point.id,
-                toBeDeleted: point.toBeDeleted,
-              );
-            },
-            itemCount: state.pathPoints.length,
-          ),
-        ),
+                    isRoot: point.isRoot,
+                    id: point.id,
+                    toBeDeleted: point.toBeDeleted,
+                  );
+                },
+                itemCount: state.pathPoints.length,
+              ),
+            ),
       ),
+      title: 'Manage PathPoints',
+      fab: _AddButton(cubit: cubit),
     );
   }
 
@@ -72,4 +55,40 @@ class _PathPointManagementViewState extends State<PathPointManagementView> {
     cubit = PathPointManagementCubit(const PathPointManagementState([]));
     cubit.loadPoints();
   }
+}
+
+class _AddButton extends CommonFAB {
+  final PathPointManagementCubit cubit;
+
+  const _AddButton({required this.cubit});
+
+  @override
+  Icon get icon => const Icon(Icons.add);
+
+  @override
+  void Function(BuildContext context) get action => (context) async {
+        return showModalBottomSheet(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0),
+              topRight: Radius.circular(10.0),
+            ),
+          ),
+          builder: (context) {
+            return BottomSheet(
+              onClosing: () {},
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0),
+                ),
+              ),
+              builder: (context) {
+                return AdditionForm(cubit: cubit);
+              },
+            );
+          },
+        );
+      };
 }
