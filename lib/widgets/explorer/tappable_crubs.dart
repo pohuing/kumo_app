@@ -32,7 +32,10 @@ class TappableCrumbs extends StatelessWidget {
                     if (settings.item2) {
                       return true;
                     }
-                    var last2 = settings.item1.split(RegExp(r'[\\/]+')).last;
+                    var last2 = settings.item1
+                        .split(RegExp(r'[\\/]+'))
+                        .where((e) => e.isNotEmpty)
+                        .last;
                     log(last2, name: runtimeType.toString());
                     if (last2 == e) {
                       return true;
