@@ -33,9 +33,10 @@ class _SignInFormState extends State<SignInForm> {
             ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: Duration(
-                milliseconds:
-                    max(4000, (state as SignInErrorState).cause.length * 100)),
-            content: Text((state as SignInErrorState).cause),
+              milliseconds:
+                  max(4000, (state as SignInErrorState).cause.length * 100),
+            ),
+            content: Text((state).cause),
           ),
         ),
         child: AutofillGroup(

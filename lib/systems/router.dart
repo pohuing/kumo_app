@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kumo_app/widgets/explorer/nested_explorer.dart';
 import 'package:kumo_app/widgets/general_purpose/common_app_bar.dart';
+import 'package:kumo_app/widgets/general_purpose/theme_screen.dart';
 import 'package:kumo_app/widgets/path_point_management/path_point_management_view.dart';
 import 'package:kumo_app/widgets/permissions/role_management/role_management_screen.dart';
 import 'package:kumo_app/widgets/sign_in_form.dart';
@@ -64,6 +65,10 @@ class RouteGenerator {
       case '/signup':
         return MaterialPageRoute(
           builder: (context) => const SignUpScreen(),
+        );
+      case '/theme':
+        return MaterialPageRoute(
+          builder: (context) => const ThemeScreen(),
         );
       default:
         return MaterialPageRoute(

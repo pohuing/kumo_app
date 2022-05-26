@@ -14,9 +14,14 @@ class CommunicationManager {
   Client client;
   String? token;
 
-  String host = kIsWeb ? 'localhost:5001' : '192.168.2.101:5001';
+  String host = kIsWeb ? 'localhost:5001' : '192.168.178.58:5001';
 
   CommunicationManager() : client = Client();
+
+  Map<String, String> get headers => {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${token!}',
+      };
 
   Future<bool> addPoint(String path, bool isRoot) async {
     final response = await client.post(
@@ -25,10 +30,7 @@ class CommunicationManager {
         'path': path,
         'isRoot': isRoot,
       }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${token!}',
-      },
+      headers: headers,
     );
 
     log(
@@ -41,10 +43,7 @@ class CommunicationManager {
   Future<bool> deletePathPoint(PathPoint pathPoint) async {
     final response = await client.delete(
       Uri.https(host, '/api/PathPoint/${pathPoint.id}'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${token!}'
-      },
+      headers: headers,
     );
 
     return response.statusCode == 200;
@@ -53,10 +52,7 @@ class CommunicationManager {
   Future<List<ExploreResult>> explore(String path) async {
     final response = await client.get(
       Uri.https(host, 'api/Explore', {'path': path}),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${token!}'
-      },
+      headers: headers,
     );
     if (response.statusCode != 200) {
       return [];
@@ -72,10 +68,7 @@ class CommunicationManager {
   Future<List<PathPoint>> getPathPoints() async {
     final response = await client.get(
       Uri.https(host, '/api/PathPoint'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${token!}'
-      },
+      headers: headers,
     );
 
     if (response.statusCode != 200) {
@@ -143,10 +136,7 @@ class CommunicationManager {
         'path': pathPoint.path,
         'isRoot': pathPoint.isRoot,
       }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${token!}',
-      },
+      headers: headers,
     );
     log(
       '${response.reasonPhrase ?? response.statusCode.toString()}: ${response.body}',

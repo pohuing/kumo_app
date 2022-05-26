@@ -21,6 +21,17 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
     return ThemeState.fromJson(json);
   }
 
+  void setTheme(Color seed, {required bool m3, required bool isBright}) {
+    ThemeCubit.seed = seed;
+    emit(
+      ThemeState(
+        getTheme(isBright: isBright, m3: m3, seed: seed),
+        isBright: isBright,
+        m3: m3,
+      ),
+    );
+  }
+
   void setSeed(Color color) {
     seed = color;
     emit(
@@ -41,6 +52,20 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
         ),
         isBright: !state.isBright,
         m3: state.m3,
+      ),
+    );
+  }
+
+  void setM3(bool m3) {
+    emit(
+      ThemeState(
+        getTheme(
+          isBright: state.isBright,
+          seed: ThemeCubit.seed,
+          m3: m3,
+        ),
+        isBright: state.isBright,
+        m3: m3,
       ),
     );
   }

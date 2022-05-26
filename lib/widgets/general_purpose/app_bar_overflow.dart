@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kumo_app/widgets/general_purpose/accent_color_picker.dart';
 
 import '../../blocs/authentication_bloc.dart';
 import '../../blocs/theme_cubit.dart';
@@ -37,7 +36,7 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
             context.read<ThemeCubit>().switchTheme();
             break;
           case OverflowActions.editTheme:
-            await AccentColorPicker.showColorPickerDialog(context);
+            await Navigator.of(context).pushNamed('/theme');
             break;
           case OverflowActions.managePathPoints:
             await Navigator.of(context).pushNamed('/managePathPoints');
@@ -126,8 +125,8 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
               value: OverflowActions.managePermissions,
               child: Row(
                 children: [
-                  Text('Manage Permissions'),
-                  Spacer(),
+                  const Text('Manage Permissions'),
+                  const Spacer(),
                   Icon(
                     Icons.security,
                     color: Theme.of(context).colorScheme.primary,

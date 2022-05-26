@@ -32,7 +32,7 @@ class _NestedExplorerState extends State<NestedExplorer> {
                   ? TappableCrumbs(
                       path: widget.path,
                     )
-                  : Text('Explorer'),
+                  : const Text('Explorer'),
               actions: const [
                 AppBarOverflow(),
               ],

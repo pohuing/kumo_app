@@ -5,14 +5,14 @@ import 'package:kumo_app/widgets/general_purpose/common_fab.dart';
 /// A scaffold which shows actions in a bottom app bar if the current theme uses
 class MaterialAdaptiveScaffold extends StatelessWidget {
   final List<Widget>? actions;
-  final CommonFAB fab;
+  final CommonFAB? fab;
   final String title;
   final Widget body;
 
   const MaterialAdaptiveScaffold({
     Key? key,
     this.actions,
-    required this.fab,
+    this.fab,
     required this.title,
     required this.body,
   }) : super(key: key);
@@ -27,20 +27,21 @@ class MaterialAdaptiveScaffold extends StatelessWidget {
         ],
       ),
       floatingActionButton: !Theme.of(context).useMaterial3 ? fab : null,
-      bottomNavigationBar: Theme.of(context).useMaterial3
-          ? BottomAppBar(
-              child: Row(
-                children: [
-                  ...?actions,
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: fab,
+      bottomNavigationBar:
+          Theme.of(context).useMaterial3 && (actions != null || fab != null)
+              ? BottomAppBar(
+                  child: Row(
+                    children: [
+                      ...?actions,
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: fab,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )
-          : null,
+                )
+              : null,
       body: body,
     );
   }
