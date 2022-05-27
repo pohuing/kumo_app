@@ -33,7 +33,7 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
                 .pushReplacementNamed('/');
             break;
           case OverflowActions.toggleTheme:
-            context.read<ThemeCubit>().switchTheme();
+            context.read<ThemeCubit>().switchBrightTheme();
             break;
           case OverflowActions.editTheme:
             await Navigator.of(context).pushNamed('/theme');

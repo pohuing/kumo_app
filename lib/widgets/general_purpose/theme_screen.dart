@@ -5,19 +5,39 @@ import '../../blocs/theme_cubit.dart';
 import 'accent_color_picker.dart';
 import 'material_adaptive_scaffold.dart';
 
-class ThemeScreen extends StatelessWidget {
+class ThemeScreen extends StatefulWidget {
   const ThemeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ThemeScreen> createState() => _ThemeScreenState();
+}
+
+class _ThemeScreenState extends State<ThemeScreen> {
+  var globalKey = GlobalKey<AccentColorPickerState>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialAdaptiveScaffold(
       body: AccentColorPicker(
-        onChange: (color, m3, isBright) {
-          context
-              .read<ThemeCubit>()
-              .setTheme(color, m3: m3, isBright: isBright);
-        },
+        key: globalKey,
+        onChange: (color, m3, isBright, respectSystemBrightness) {},
       ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            final s = globalKey.currentState;
+            if (s != null) {
+              context.read<ThemeCubit>().setTheme(
+                    s.currentColor,
+                    m3: s.useMaterial3,
+                    isBright: s.isBright,
+                    respectSystemTheme: s.respectSystemBrightness,
+                  );
+            }
+          },
+          icon: const Icon(Icons.save),
+        )
+      ],
       title: 'Edit your theme',
     );
   }

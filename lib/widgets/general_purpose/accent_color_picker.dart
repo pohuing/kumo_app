@@ -5,7 +5,12 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../../blocs/theme_cubit.dart';
 
 class AccentColorPicker extends StatefulWidget {
-  final void Function(Color color, bool m3, bool isBright)? onChange;
+  final void Function(
+    Color color,
+    bool m3,
+    bool isBright,
+    bool respectSystemBrightness,
+  )? onChange;
 
   const AccentColorPicker({
     Key? key,
@@ -13,7 +18,7 @@ class AccentColorPicker extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AccentColorPicker> createState() => _AccentColorPickerState();
+  State<AccentColorPicker> createState() => AccentColorPickerState();
 
   static Future<void> showColorPickerDialog(BuildContext context) {
     return showModalBottomSheet(
@@ -30,17 +35,14 @@ class AccentColorPicker extends StatefulWidget {
   }
 }
 
-class _AccentColorPickerState extends State<AccentColorPicker> {
+class AccentColorPickerState extends State<AccentColorPicker> {
   late Color currentColor;
-  bool? useMaterial3;
-
-  bool? isBright;
+  late bool useMaterial3;
+  late bool isBright;
+  late bool respectSystemBrightness;
 
   @override
   Widget build(BuildContext context) {
-    useMaterial3 ??= context.read<ThemeCubit>().state.m3;
-    isBright ??= context.read<ThemeCubit>().state.isBright;
-
     var brightScheme = ThemeCubit.getTheme(
       isBright: true,
       seed: currentColor,
@@ -59,14 +61,17 @@ class _AccentColorPickerState extends State<AccentColorPicker> {
           pickerColor: currentColor,
           onColorChanged: (color) {
             setState(() => currentColor = color);
-            widget.onChange?.call(currentColor, useMaterial3!, isBright!);
+            onChange();
           },
           displayThumbColor: true,
         ),
         const SizedBox(height: 16),
-        Text(
-          'Bright theme',
-          style: Theme.of(context).textTheme.titleMedium,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Bright theme',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
         const SizedBox(height: 8),
         Row(
@@ -92,9 +97,12 @@ class _AccentColorPickerState extends State<AccentColorPicker> {
           ],
         ),
         const SizedBox(height: 16),
-        Text(
-          'Dark theme',
-          style: Theme.of(context).textTheme.titleMedium,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Dark theme',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
         const SizedBox(height: 8),
         Row(
@@ -122,18 +130,26 @@ class _AccentColorPickerState extends State<AccentColorPicker> {
         const SizedBox(height: 16),
         SwitchListTile.adaptive(
           title: const Text('Use Material 3'),
-          value: useMaterial3!,
+          value: useMaterial3,
           onChanged: (v) {
             setState(() => useMaterial3 = v);
-            widget.onChange?.call(currentColor, useMaterial3!, isBright!);
+            onChange();
           },
         ),
         SwitchListTile.adaptive(
           title: const Text('Bright Theme'),
-          value: isBright!,
+          value: isBright,
           onChanged: (b) {
             setState(() => isBright = b);
-            widget.onChange?.call(currentColor, useMaterial3!, isBright!);
+            onChange();
+          },
+        ),
+        SwitchListTile.adaptive(
+          title: const Text('Respect System Brightness'),
+          value: respectSystemBrightness,
+          onChanged: (b) {
+            setState(() => respectSystemBrightness = b);
+            onChange();
           },
         ),
       ],
@@ -142,7 +158,20 @@ class _AccentColorPickerState extends State<AccentColorPicker> {
 
   @override
   void initState() {
+    useMaterial3 = context.read<ThemeCubit>().state.m3;
+    isBright = context.read<ThemeCubit>().state.isBright;
+    currentColor = context.read<ThemeCubit>().state.seed;
+    respectSystemBrightness =
+        context.read<ThemeCubit>().state.respectSystemBrightness;
     super.initState();
-    currentColor = ThemeCubit.seed;
+  }
+
+  void onChange() {
+    widget.onChange?.call(
+      currentColor,
+      useMaterial3,
+      isBright,
+      respectSystemBrightness,
+    );
   }
 }

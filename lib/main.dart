@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +45,16 @@ Future<void> main({List<String>? args, bool? runningAsTest = false}) async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget with WidgetsBindingObserver {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  late WidgetsBinding binding;
+  late FlutterWindow window;
 
   @override
   Widget build(BuildContext context) {
@@ -62,5 +71,24 @@ class MyApp extends StatelessWidget {
         );
       },
     );
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    super.didChangePlatformBrightness();
+    context
+        .read<ThemeCubit>()
+        .systemChangedBrightness(window.platformDispatcher.platformBrightness);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    binding = WidgetsBinding.instance;
+    binding.addObserver(this);
+    window = binding.window;
+    context
+        .read<ThemeCubit>()
+        .systemChangedBrightness(window.platformDispatcher.platformBrightness);
   }
 }
