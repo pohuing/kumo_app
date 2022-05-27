@@ -134,19 +134,20 @@ class _AppBarOverflowState extends State<AppBarOverflow> {
                 ],
               ),
             ),
-          PopupMenuItem(
-            value: OverflowActions.signOut,
-            child: Row(
-              children: [
-                const Text('Sign out'),
-                const Spacer(),
-                Icon(
-                  Icons.logout,
-                  color: Theme.of(context).colorScheme.primary,
-                )
-              ],
+          if (context.read<AuthenticationCubit>().state is SignedInState)
+            PopupMenuItem(
+              value: OverflowActions.signOut,
+              child: Row(
+                children: [
+                  const Text('Sign out'),
+                  const Spacer(),
+                  Icon(
+                    Icons.logout,
+                    color: Theme.of(context).colorScheme.primary,
+                  )
+                ],
+              ),
             ),
-          ),
         ];
       },
     );
