@@ -59,7 +59,7 @@ class CommunicationManager {
     }
     // log(response.body, name:runtimeType.toString());
     final jsonDecoded = jsonDecode(response.body);
-    return List.from(jsonDecoded)
+    return List.from(jsonDecoded['payload'])
         .map((e) => Map<String, dynamic>.from(e))
         .map((e) => ExploreResult.fromJSON(e))
         .toList();
@@ -80,7 +80,7 @@ class CommunicationManager {
 
     return List.from(jsonDecoded)
         .map((e) => Map<String, dynamic>.from(e))
-        .map((e) => PathPoint.fromJSON(e))
+        .map((e) => PathPoint.fromJSON(e['payload']))
         .toList();
   }
 
@@ -100,8 +100,8 @@ class CommunicationManager {
     );
     if (response.statusCode != 200) return false;
 
-    final json = Map<String, String>.from(jsonDecode(response.body));
-    final token = json['token'];
+    final json = Map<String, dynamic>.from(jsonDecode(response.body));
+    final token = json['payload']['token'];
     if (token == null) {
       return false;
     }
