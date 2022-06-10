@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:kumo_app/models/populated_permission.dart';
 import 'package:kumo_app/widgets/explorer/nested_explorer.dart';
 import 'package:kumo_app/widgets/general_purpose/common_app_bar.dart';
 import 'package:kumo_app/widgets/general_purpose/theme_screen.dart';
@@ -11,6 +12,8 @@ import 'package:kumo_app/widgets/permissions/role_management/role_management_scr
 import 'package:kumo_app/widgets/sign_in_form.dart';
 import 'package:kumo_app/widgets/sign_up_screen.dart';
 import 'package:tuple/tuple.dart';
+
+import '../widgets/permissions/role_management/manage_role_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -61,6 +64,12 @@ class RouteGenerator {
       case '/managePermissions':
         return MaterialPageRoute(
           builder: (context) => const RoleManagementScreen(),
+        );
+      case '/manageRole':
+        assert(settings.arguments is List<PopulatedPermission>);
+        return MaterialPageRoute(
+          builder: (context) => ManageRoleScreen(
+              points: (settings.arguments as List<PopulatedPermission>)),
         );
       case '/signup':
         return MaterialPageRoute(

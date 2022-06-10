@@ -4,8 +4,11 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:kumo_app/models/path_point.dart';
+import 'package:kumo_app/models/populated_permission.dart';
 
 import '../models/explore_result.dart';
+import '../models/permission.dart';
+import '../models/role.dart';
 
 class CommunicationManager {
   static final CommunicationManager _instance = CommunicationManager();
@@ -14,7 +17,7 @@ class CommunicationManager {
   Client client;
   String? token;
 
-  String host = kIsWeb ? 'localhost:5001' : '192.168.178.58:5001';
+  String host = kIsWeb ? 'localhost:5001' : 'localhost:5001';
 
   CommunicationManager() : client = Client();
 
@@ -78,9 +81,9 @@ class CommunicationManager {
 
     final jsonDecoded = jsonDecode(response.body);
 
-    return List.from(jsonDecoded)
+    return List.from(jsonDecoded['payload'])
         .map((e) => Map<String, dynamic>.from(e))
-        .map((e) => PathPoint.fromJSON(e['payload']))
+        .map((e) => PathPoint.fromJSON(e))
         .toList();
   }
 
@@ -100,8 +103,9 @@ class CommunicationManager {
     );
     if (response.statusCode != 200) return false;
 
-    final json = Map<String, dynamic>.from(jsonDecode(response.body));
-    final token = json['payload']['token'];
+    final json =
+        Map<String, dynamic>.from(jsonDecode(response.body)['payload']);
+    final token = json['token'];
     if (token == null) {
       return false;
     }
@@ -143,5 +147,80 @@ class CommunicationManager {
       name: '$runtimeType.updatePathPoint',
     );
     return response.statusCode == 200;
+  }
+
+  Future<List<Permission>> getPermissions() async {
+    final response = await client.get(
+      Uri.https(host, '/api/Permission'),
+      headers: headers,
+    );
+    log(
+      '${response.reasonPhrase ?? response.statusCode.toString()}: ${response.body}',
+      name: '$runtimeType.getPermissions',
+    );
+    if (response.statusCode != 200) {
+      return [];
+    }
+
+    final jsonDecoded = jsonDecode(response.body);
+
+    final json = List.from(jsonDecoded['payload'])
+        .map((e) => Map<String, dynamic>.from(e))
+        .map((e) => Permission.fromJson(e))
+        .whereType<Permission>()
+        .toList();
+
+    return json;
+  }
+
+  Future<List<Role>> getRoles() async {
+    final response = await client.get(
+      Uri.https(host, '/api/Role'),
+      headers: headers,
+    );
+    log(
+      '${response.reasonPhrase ?? response.statusCode.toString()}: ${response.body}',
+      name: '$runtimeType.getPermissions',
+    );
+    if (response.statusCode != 200) {
+      return [];
+    }
+
+    final jsonDecoded = jsonDecode(response.body);
+
+    final json = List.from(jsonDecoded['payload'])
+        .map((e) => Map<String, dynamic>.from(e))
+        .map((e) => Role.fromJson(e))
+        .whereType<Role>()
+        .toList();
+
+    return json;
+  }
+
+  Future<List<PopulatedPermission>> getPopulatedPermissions() async {
+    late List<Permission> perms;
+    late List<Role> roles;
+    late List<PathPoint> points;
+    await Future.wait([
+      () async {
+        perms = await CommunicationManager.instance.getPermissions();
+      }(),
+      () async {
+        roles = await CommunicationManager.instance.getRoles();
+      }(),
+      () async {
+        points = await CommunicationManager.instance.getPathPoints();
+      }(),
+    ]);
+
+    return perms
+        .map(
+          (e) => PopulatedPermission(
+            e,
+            roles.firstWhere((role) => role.id == e.roleId),
+            points.firstWhere((point) => point.id == e.pathPointId),
+          ),
+        )
+        .toList();
   }
 }
