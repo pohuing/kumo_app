@@ -29,16 +29,40 @@ class _SignInFormState extends State<SignInForm> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: BlocListener<AuthenticationCubit, AuthenticationState>(
         listenWhen: (previous, current) => current is SignInErrorState,
-        listener: (context, state) =>
-            ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            duration: Duration(
-              milliseconds:
-                  max(4000, (state as SignInErrorState).cause.length * 100),
+        listener: (context, state) {
+          final duration =
+              max(4000, (state as SignInErrorState).cause.length * 100);
+          final endTime = DateTime.now().add(Duration(milliseconds: duration));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: Duration(milliseconds: duration),
+              content: IgnorePointer(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Text((state).cause),
+                    const SizedBox(height: 16),
+                    // TODO: This can probably done in a more efficient manner on every frame instead of scheduled for time
+                    StreamBuilder<int>(
+                      stream: Stream.periodic(
+                        const Duration(microseconds: 69),
+                        (computationCount) =>
+                            (endTime.difference(DateTime.now())).inMilliseconds,
+                      ).takeWhile(
+                        (tick) => 0 > DateTime.now().compareTo(endTime),
+                      ),
+                      builder: (context, snapshot) => snapshot.hasData
+                          ? LinearProgressIndicator(
+                              value: snapshot.data! / duration,
+                            )
+                          : Container(),
+                    )
+                  ],
+                ),
+              ),
             ),
-            content: Text((state).cause),
-          ),
-        ),
+          );
+        },
         child: AutofillGroup(
           child: ListView(
             padding: const EdgeInsets.all(16),
