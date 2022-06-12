@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kumo_app/models/explore_result.dart';
 import 'package:kumo_app/systems/communication_manager.dart';
+import 'package:kumo_app/systems/handle_async.dart';
 import 'package:kumo_app/widgets/explorer/tappable_crubs.dart';
 import 'package:kumo_app/widgets/general_purpose/app_bar_overflow.dart';
 import 'package:tuple/tuple.dart';
@@ -43,25 +44,17 @@ class _NestedExplorerState extends State<NestedExplorer> {
           onRefresh: refreshAction,
           child: FutureBuilder<List<ExploreResult>>(
             future: future,
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                case ConnectionState.active:
-                  return const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  );
-                case ConnectionState.done:
-                  return ListView.builder(
-                    padding: EdgeInsets.zero,
-                    primary: true,
-                    itemBuilder: (context, index) => FileWidget(
-                      data: snapshot.data![index],
-                    ),
-                    itemCount: snapshot.data!.length,
-                  );
-              }
-            },
+            builder: (context, snapshot) => futureBuilderHandler(
+              snapshot: snapshot,
+              onFinished: (snapshot) => ListView.builder(
+                padding: EdgeInsets.zero,
+                primary: true,
+                itemBuilder: (context, index) => FileWidget(
+                  data: snapshot.data![index],
+                ),
+                itemCount: snapshot.data!.length,
+              ),
+            ),
           ),
         ),
       ),

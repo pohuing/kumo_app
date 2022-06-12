@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:kumo_app/systems/communication_manager.dart';
+import 'package:kumo_app/systems/handle_async.dart';
 
 import '../../models/populated_permission.dart';
 import '../../systems/communication_manager.dart';
@@ -21,20 +20,13 @@ class _PermissionManagementViewState extends State<PermissionManagementView> {
   Widget build(BuildContext context) {
     return FutureBuilder<List<PopulatedPermission>>(
       future: future,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          log(snapshot.error.toString(), name: runtimeType.toString());
-          return Center(child: Text(snapshot.toString()));
-        }
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator.adaptive());
-        }
-
-        final data = snapshot.data;
-        if (data != null) {
-          return ListView.builder(
-            itemCount: snapshot.data?.length ?? 0,
-            itemBuilder: (context, index) => ExpansionTile(
+      builder: (context, snapshot) => futureBuilderHandler(
+        snapshot: snapshot,
+        onFinished: (snapshot) => ListView.builder(
+          itemCount: snapshot.data?.length ?? 0,
+          itemBuilder: (context, index) {
+            final data = snapshot.data!;
+            return ExpansionTile(
               title: Text(data[index].role.name),
               children: [
                 ListTile(
@@ -65,12 +57,10 @@ class _PermissionManagementViewState extends State<PermissionManagementView> {
                   trailing: Icon(Icons.delete_forever),
                 ),
               ],
-            ),
-          );
-        } else {
-          return Container();
-        }
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 
