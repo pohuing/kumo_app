@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kumo_app/blocs/fab_action.dart';
 import 'package:kumo_app/systems/communication_manager.dart';
 import 'package:kumo_app/systems/handle_async.dart';
 
@@ -68,5 +70,7 @@ class _PermissionManagementViewState extends State<PermissionManagementView> {
   void initState() {
     super.initState();
     future = CommunicationManager.instance.getPopulatedPermissions();
+    context.read<FabActionCubit>().changeAction(
+        null); //(context) {log('Hello from permission manager');});
   }
 }

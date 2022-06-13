@@ -223,4 +223,20 @@ class CommunicationManager {
         )
         .toList();
   }
+
+  Future<bool> createNewRole(String name) async {
+    final response = await client.post(
+      Uri.https(host, '/api/Role'),
+      body: jsonEncode({
+        'name': name,
+      }),
+      headers: headers,
+    );
+
+    log(
+      '${response.reasonPhrase ?? response.statusCode.toString()}: ${response.body}',
+      name: '$runtimeType.createNewRole',
+    );
+    return response.statusCode < 300 && response.statusCode >= 200;
+  }
 }

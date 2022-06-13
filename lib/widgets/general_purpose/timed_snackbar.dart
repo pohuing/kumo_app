@@ -1,16 +1,15 @@
-import 'dart:math';
+import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
 
 void showTimedSnackBar(BuildContext context, String message) {
   {
     final duration = max(4000, message.length * 100);
-    final spawnTime = DateTime.now();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: Duration(milliseconds: duration),
         content: IgnorePointer(
-          child: _SnackBarTimerContent(message: message, spawnTime: spawnTime),
+          child: _SnackBarTimerContent(message: message),
         ),
       ),
     );
@@ -19,10 +18,11 @@ void showTimedSnackBar(BuildContext context, String message) {
 
 class _SnackBarTimerContent extends StatefulWidget {
   final String message;
-  final DateTime spawnTime;
 
-  const _SnackBarTimerContent(
-      {super.key, required this.message, required this.spawnTime});
+  const _SnackBarTimerContent({
+    super.key,
+    required this.message,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -32,7 +32,6 @@ class _SnackBarTimerContent extends StatefulWidget {
 
 class _SnackBarTimerContentState extends State<_SnackBarTimerContent> {
   late final Stream<int> timer;
-  late final DateTime endTime;
   late final int duration;
 
   @override
@@ -58,11 +57,10 @@ class _SnackBarTimerContentState extends State<_SnackBarTimerContent> {
   @override
   void initState() {
     duration = max(4000, widget.message.length * 100);
-    endTime = widget.spawnTime.add(Duration(milliseconds: duration));
+    var endTime = DateTime.now().add(Duration(milliseconds: duration));
     timer = Stream<int>.periodic(
       const Duration(microseconds: 69),
-      (computationCount) =>
-          (endTime.difference(widget.spawnTime)).inMilliseconds,
+      (computationCount) => (endTime.difference(DateTime.now())).inMilliseconds,
     ).takeWhile(
       (tick) => 0 > DateTime.now().compareTo(endTime),
     );

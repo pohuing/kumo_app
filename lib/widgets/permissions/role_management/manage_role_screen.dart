@@ -17,8 +17,8 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialAdaptiveScaffold(
-      fab: CommonFAB(icon: Icon(Icons.add)),
-      actions: [IconButton(onPressed: () {}, icon: Icon(Icons.save))],
+      fab: const CommonFAB(icon: Icon(Icons.add)),
+      actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.save))],
       body: ListView.builder(
         primary: true,
         itemCount: widget.points.length,

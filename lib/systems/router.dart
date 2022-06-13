@@ -67,14 +67,16 @@ class RouteGenerator {
         assert(settings.arguments is List<PopulatedPermission>);
         return MaterialPageRoute(
           builder: (context) => ManageRoleScreen(
-              points: (settings.arguments as List<PopulatedPermission>)),
+            points: (settings.arguments as List<PopulatedPermission>),
+          ),
         );
       case '/signup':
         return MaterialPageRoute(
-            builder: (context) => Scaffold(
-                  appBar: CommonAppBar(title: 'Sign Up'),
-                  body: const SignUpForm(),
-                ));
+          builder: (context) => Scaffold(
+            appBar: CommonAppBar(title: 'Sign Up'),
+            body: const SignUpForm(),
+          ),
+        );
       case '/theme':
         return MaterialPageRoute(
           builder: (context) => const ThemeScreen(),
