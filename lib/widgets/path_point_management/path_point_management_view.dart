@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kumo_app/blocs/path_point_cubit.dart';
 import 'package:kumo_app/widgets/general_purpose/common_fab.dart';
 import 'package:kumo_app/widgets/general_purpose/material_adaptive_scaffold.dart';
-import 'package:kumo_app/widgets/path_point_management/addition_form.dart';
+import 'package:kumo_app/widgets/path_point_management/path_point_addition_form.dart';
 import 'package:kumo_app/widgets/path_point_management/path_point_management_view_expansion_tile.dart';
 import 'package:kumo_app/widgets/path_point_management/save_button.dart';
 
@@ -85,7 +85,7 @@ class _AddButton extends CommonFAB {
                 ),
               ),
               builder: (context) {
-                return AdditionForm(cubit: cubit);
+                return PathPointAdditionForm(cubit: cubit);
               },
             );
           },

@@ -69,7 +69,7 @@ class AuthenticationCubit extends HydratedCubit<AuthenticationState> {
 
 abstract class AuthenticationState {
   factory AuthenticationState(Map<String, dynamic> json) {
-    log(json.toString(), name: '${AuthenticationState}.factory');
+    log(json.toString(), name: '$AuthenticationState.factory');
 
     if (json['type'] == (SignedInState).toString()) {
       return SignedInState.fromJson(json);

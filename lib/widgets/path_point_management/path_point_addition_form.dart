@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:kumo_app/blocs/path_point_cubit.dart';
 
-class AdditionForm extends StatefulWidget {
+class PathPointAdditionForm extends StatefulWidget {
   final PathPointManagementCubit cubit;
 
-  const AdditionForm({Key? key, required this.cubit}) : super(key: key);
+  const PathPointAdditionForm({Key? key, required this.cubit})
+      : super(key: key);
 
   @override
-  State<AdditionForm> createState() => _AdditionFormState();
+  State<PathPointAdditionForm> createState() => _PathPointAdditionFormState();
 }
 
-class _AdditionFormState extends State<AdditionForm> {
+class _PathPointAdditionFormState extends State<PathPointAdditionForm> {
   bool isRoot = false;
   String path = '';
   bool saveFailed = false;
