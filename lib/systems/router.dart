@@ -20,12 +20,10 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (context) {
-            return Scaffold(
-              appBar: CommonAppBar(title: 'Sign-in'),
-              body: const SignInForm(),
-            );
-          },
+          builder: (context) => Scaffold(
+            appBar: CommonAppBar(title: 'Sign-in'),
+            body: const SignInForm(),
+          ),
         );
       case '/explore':
       case 'explore':
@@ -73,8 +71,10 @@ class RouteGenerator {
         );
       case '/signup':
         return MaterialPageRoute(
-          builder: (context) => const SignUpScreen(),
-        );
+            builder: (context) => Scaffold(
+                  appBar: CommonAppBar(title: 'Sign Up'),
+                  body: const SignUpForm(),
+                ));
       case '/theme':
         return MaterialPageRoute(
           builder: (context) => const ThemeScreen(),

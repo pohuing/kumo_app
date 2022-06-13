@@ -2,16 +2,16 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kumo_app/blocs/authentication_bloc.dart';
-import 'package:kumo_app/widgets/general_purpose/common_app_bar.dart';
+import 'package:kumo_app/widgets/general_purpose/timed_snackbar.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _passwordRepeatController = TextEditingController();
@@ -19,9 +19,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CommonAppBar(title: 'Sign up'),
-      body: Form(
+    return BlocListener<AuthenticationCubit, AuthenticationState>(
+      listenWhen: (previous, current) => current is SignUpErrorState,
+      listener: (context, state) =>
+          showTimedSnackBar(context, (state as SignUpErrorState).cause),
+      child: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: AutofillGroup(

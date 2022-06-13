@@ -54,7 +54,7 @@ class AuthenticationCubit extends HydratedCubit<AuthenticationState> {
     if (res) {
       emit(SignedOutState());
     } else {
-      emit(SignInErrorState('Failed'));
+      emit(SignUpErrorState('Failed to create a new account'));
     }
 
     return res;
@@ -144,5 +144,27 @@ class SigningInState implements AuthenticationState {
     return {
       'type': (SignedOutState).toString(),
     };
+  }
+}
+
+class SignUpErrorState implements AuthenticationState {
+  final String cause;
+
+  SignUpErrorState(this.cause);
+
+  SignUpErrorState fromJson(Map<String, dynamic> json) {
+    return SignUpErrorState(json['cause']);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': (SignedOutState).toString(),
+    };
+  }
+
+  @override
+  String toString() {
+    return 'SignUpErrorState{cause: $cause}';
   }
 }

@@ -2,10 +2,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kumo_app/blocs/authentication_bloc.dart';
-import 'package:kumo_app/widgets/sign_up_screen.dart';
+import 'package:kumo_app/widgets/general_purpose/timed_snackbar.dart';
 import 'package:tuple/tuple.dart';
-
-import 'general_purpose/timed_snackbar.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -84,12 +82,8 @@ class _SignInFormState extends State<SignInForm> {
               ),
               MaterialButton(
                 onPressed: () async {
-                  final result = await Navigator.push<List<String>>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignUpScreen(),
-                    ),
-                  );
+                  final result =
+                      await Navigator.of(context).pushNamed('/signup');
                   if (result is List<String> && result.length == 2) {
                     _emailController.text = result.first;
                     _passwordController.text = result.last;
